@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                 String
+  email                String  @unique
+  provider             String
+  tempToken            String?
+  verifiedEmail        Boolean @default(false)
+  stripeCustomerId     String? @unique
+  stripeSubscriptionId String? @unique
+  subscribeStatus      String  @default("unfinished")
+  paymentIntentStatus  String?
+  metadata             Json? //at fetch time - parse json and collect the name and send to session
+
+  country  String
+  password String?
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  businessId String    @unique @db.Uuid
+  business   Business  @relation(fields: [businessId], references: [id])
+  Reports    Reports[]
+}
+
+model Business {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String
+  category    String
+  clients     String
+  createdAt   DateTime @default(now())
+  updateAt    DateTime @updatedAt
+  form        Form[]
+  user        User?
+}
+
+model Form {
+  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title          String
+  description    String?
+  category       String
+  shortId        String  @unique
+  entrances      Int     @default(0)
+  extraEntrances Int     @default(0)
+  status         String  @default("in_progress")
+  limitAns       Int     @default(45)
+
+  businessId String   @db.Uuid
+  createdAt  DateTime @default(now())
+  updateAt   DateTime @updatedAt
+
+  analyse     Analyse?
+  bus         Business      @relation(fields: [businessId], references: [id])
+  questions   Questions[]
+  userAnswear UserAnswear[]
+}
+
+model Questions {
+  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  question  String
+  type      String
+  goal      String
+  options   String[]
+  formId    String     @db.Uuid
+  createdAt DateTime   @default(now())
+  updateAt  DateTime   @updatedAt
+  form      Form       @relation(fields: [formId], references: [id])
+  Answears  Answears[]
+}
+
+model UserAnswear {
+  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String
+  referenceCode String     @unique
+  formId        String     @db.Uuid
+  createdAt     DateTime   @default(now())
+  updateAt      DateTime   @updatedAt
+  answears      Answears[]
+  form          Form       @relation(fields: [formId], references: [id])
+}
+
+model Answears {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  questionId    String   @db.Uuid
+  userAwnsearId String   @db.Uuid
+  answear       String
+  createdAt     DateTime @default(now())
+  updateAt      DateTime @updatedAt
+
+  userAwnser UserAnswear @relation(fields: [userAwnsearId], references: [id])
+  question   Questions   @relation(fields: [questionId], references: [id])
+}
+
+model Analyse {
+  id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  formId           String          @unique @db.Uuid
+  feeling          String?
+  feelingDesc      String?
+  keywords         String[]
+  satisfationLevel String
+  createdAt        DateTime        @default(now())
+  updateAt         DateTime        @updatedAt
+  form             Form            @relation(fields: [formId], references: [id])
+  topics           TopicAnalyses[]
+  stats            Stats[]
+}
+
+model Stats {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  title String
+  info  String
+  data  String
+
+  analyseId String? @db.Uuid
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  Analyses Analyse? @relation(fields: [analyseId], references: [id])
+}
+
+model TopicAnalyses {
+  id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title        String
+  type         String
+  description  String
+  howToImprove String?
+
+  analyseId String? @db.Uuid
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  Analyses Analyse? @relation(fields: [analyseId], references: [id])
+}
+
+model Reports {
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  category    String
+  description String
+  media       String?
+
+  userId String @db.Uuid
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  User User? @relation(fields: [userId], references: [id])
+}

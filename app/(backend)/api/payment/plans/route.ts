@@ -1,0 +1,16 @@
+
+import { NextRequest, NextResponse } from "next/server";
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+
+export async function GET(req: NextRequest, res: NextResponse) {
+  const products = await stripe.products.list({
+    limit: 3,
+    active: true,
+  });
+
+  const prices = await stripe.prices.list({
+    active: true,
+  });
+
+  return NextResponse.json({ products: products.data, prices: prices.data }, { status: 200 });
+}

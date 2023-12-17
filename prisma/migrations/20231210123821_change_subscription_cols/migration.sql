@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE "Form" ADD COLUMN     "limitAns" INTEGER NOT NULL DEFAULT 45;
+
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "level" INTEGER DEFAULT 1,
+ADD COLUMN     "maxAnswears" INTEGER DEFAULT 45,
+ADD COLUMN     "status" TEXT NOT NULL DEFAULT 'active';
