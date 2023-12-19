@@ -1,5 +1,5 @@
 {
-  "name": "next-app-template",
+  "name": "smartformx-app",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -37,8 +37,6 @@
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
-    "eslint": "8.48.0",
-    "eslint-config-next": "13.4.19",
     "framer-motion": "^10.16.2",
     "html-to-image": "^1.11.11",
     "intl-messageformat": "^10.5.0",
