@@ -1,35 +1,23 @@
-# Use an official Node.js LTS version as the base image
-FROM node:14-alpine as builder
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy package.json and package-lock.json to the container
-COPY package*.json ./
-
-# Install dependencies
-RUN npm ci --production
-
-# Copy the rest of the application code to the container
-COPY . .
-
-# Build the Next.js application
-RUN npm run build
-
-# Stage 2: Create a minimal image for production
+# Use the official Node.js image as base
 FROM node:14-alpine
 
-# Set the working directory in the second stage
+# Defina o diretório de trabalho dentro do contêiner
 WORKDIR /app
 
-# Copy only the necessary files from the builder stage
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package*.json ./
+# Copie o arquivo package.json e package-lock.json para o contêiner
+COPY package*.json ./
 
-# Expose the application port
+# Instale as dependências
+RUN npm install
+
+# Copie o restante dos arquivos da aplicação para o contêiner
+COPY . .
+
+# Construa a aplicação Next.js para produção
+RUN npm run build
+
+# Exponha a porta em que a aplicação Next.js será executada
 EXPOSE 3000
 
-# Run the application in production mode
+# Comando para iniciar a aplicação quando o contêiner for iniciado
 CMD ["npm", "app"]
