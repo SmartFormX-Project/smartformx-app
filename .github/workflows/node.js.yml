@@ -24,7 +24,7 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node -version }}
+          node-version: ${{ matrix.node-version }}
 
       - name: Install Yarn, PM2
         run: npm install -g yarn pm2
