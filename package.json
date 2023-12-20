@@ -73,5 +73,10 @@
     "autoprefixer": "10.4.15",
     "postcss": "8.4.29",
     "tailwindcss": "3.3.3"
-  }
+  },
+  "description": "This is a template for creating applications using Next.js 13 (app directory) and NextUI (v2).",
+  "main": "next.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
