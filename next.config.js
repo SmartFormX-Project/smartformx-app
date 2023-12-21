@@ -3,6 +3,7 @@ const nextConfig = {
   experimental: {
     appDir: true,
     instrumentationHook: true,
+    serverComponentsExternalPackages: ["bcrypt"]
   },
 };
 
