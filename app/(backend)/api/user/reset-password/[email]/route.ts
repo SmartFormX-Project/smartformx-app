@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/config/prisma";
-import { hash } from "bcrypt";
+import { hash } from "bcryptjs";
 import crypto from "crypto";
 import EmailSenderRepository from "@/app/(backend)/repository/mailsender";
 
