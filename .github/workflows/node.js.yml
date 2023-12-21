@@ -38,7 +38,7 @@ jobs:
     - name: Install Node.js dependencies
       run: |
         npm i -g pnpm
-        pnpm i
+        pnpm i --prod
         npx prisma migrate deploy
     - run: pnpm build
 
