@@ -1,14 +1,13 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { GotoProp } from "@/types";
 import { motion } from "framer-motion";
 
 import { FiArrowRight } from "react-icons/fi";
 import { Button } from "@nextui-org/button";
 
 import { thankyou } from "@/assets";
-const Success = ({ gotoForm }: GotoProp) => {
+const Success = () => {
   const successVariants = {
     hidden: {
       opacity: 0,

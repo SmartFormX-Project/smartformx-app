@@ -8,7 +8,7 @@ import Success from "@/components/register/Success";
 
 import { useMultistepForm } from "@/components/register/hooks/useMultistepForm";
 import { AnimatePresence } from "framer-motion";
-import { FormItems } from "@/types";
+
 
 import { useForm } from "react-hook-form";
 import UserService from "@/app/(backend)/services/UserServices";
@@ -20,7 +20,6 @@ import { useEffect, useState } from "react";
 
 import { loadStripe } from "@stripe/stripe-js";
 import PaymentService from "@/app/(backend)/services/PaymentService";
-import { authOptions } from "@/app/(backend)/api/auth/[...nextauth]/route";
 
 import { Avatar } from "@nextui-org/avatar";
 import { Chip } from "@nextui-org/chip";
@@ -221,7 +220,7 @@ export default function SignUp() {
             <section className="h-full overflow-hidden rounded-xl px-6 py-8 md:px-6 lg:w-[550px] lg:px-14">
               {isSuccess ? (
                 <AnimatePresence mode="wait">
-                  <Success gotoForm={gotoForm} />
+                  <Success/>
                 </AnimatePresence>
               ) : (
                 <form

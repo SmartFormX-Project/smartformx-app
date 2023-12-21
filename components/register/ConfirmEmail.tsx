@@ -1,12 +1,11 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { GotoProp } from "@/types";
 import { motion } from "framer-motion";
 
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { Button } from "@nextui-org/button";
-const ConfirmEmail = ({ gotoForm }: GotoProp) => {
+const ConfirmEmail = () => {
   const successVariants = {
     hidden: {
       opacity: 0,

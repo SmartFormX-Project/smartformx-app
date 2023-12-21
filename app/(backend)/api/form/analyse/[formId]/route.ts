@@ -33,7 +33,7 @@ export async function GET(
 
   // incomplete, incomplete_expired, trialing, active, past_due, canceled, or unpaid
   if (
-    form.bus.user?.subscribeStatus != "active" &&
+    form?.bus.user?.subscribeStatus != "active" &&
     form?.bus.user?.subscribeStatus != "trialing"
   )
     return NextResponse.json({ type: "subscribe_issues" }, { status: 403 });

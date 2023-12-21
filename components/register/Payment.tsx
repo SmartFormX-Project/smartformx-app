@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 // import { Checkbox } from "./ui/checkbox";
 import { motion } from "framer-motion";
 import useVariants from "./hooks/useVariants";
-import { FormItems } from "@/types";
+
 import { FieldValues, UseFormRegister } from "react-hook-form";
 import { Input } from "@nextui-org/input";
 import { Radio, RadioGroup } from "@nextui-org/react";
@@ -12,7 +12,7 @@ import { FaPix } from "react-icons/fa6";
 import { Button } from "@nextui-org/button";
 
 type updateWithAddons = {
-  updateForm: (updateField: Partial<FormItems>) => void;
+  updateForm: (updateField: any) => void;
   status: string;
   register: UseFormRegister<FieldValues>;
 };
