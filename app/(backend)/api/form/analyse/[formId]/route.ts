@@ -32,10 +32,13 @@ export async function GET(
   if (!form) NextResponse.json("Form not found", { status: 404 });
 
   // incomplete, incomplete_expired, trialing, active, past_due, canceled, or unpaid
-  if (form?.bus.user?.subscribeStatus != "active" &&form?.bus.user?.subscribeStatus != "trialing")
+  if (
+    form.bus.user?.subscribeStatus != "active" &&
+    form?.bus.user?.subscribeStatus != "trialing"
+  )
     return NextResponse.json({ type: "subscribe_issues" }, { status: 403 });
 
-  var goals = form?.questions.map((element) => element.goal);
+  var goals = form.questions.map((element: any) => element.goal);
 
   const result = ProcessQuestionsToAIForm(form?.questions ?? []);
 
