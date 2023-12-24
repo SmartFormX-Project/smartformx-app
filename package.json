@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "gen-ans": "npx ts-node utils/scripts/form-ans.ts",
-    "worker": "dotenv -e .env.local -- npx tsx watch app/(backend)/workers/analyse.ts",
-    "app": "npm-run-all start worker"
+    "worker": "npx tsx --watch 'app/(backend)/workers/analyse.ts'"
   },
   "dependencies": {
     "@nextui-org/avatar": "2.0.19",
@@ -71,6 +70,7 @@
     "eslint": "^8.56.0",
     "postcss": "8.4.29",
     "tailwindcss": "3.3.3",
+    "tsx": "^4.7.0",
     "typescript": "5.0.4"
   }
 }
