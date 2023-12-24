@@ -1,15 +1,12 @@
 import { encodingForModel } from "tiktoken-node";
 import OpenAI from "openai";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_TOKEN,
+  organization: process.env.OPENAI_ORG,
+});
+
 class OpenAiRepositoryClass {
-  private openai;
-  constructor() {
-    this.openai = new OpenAI({
-      apiKey: process.env.OPENAI_TOKEN,
-      organization: process.env.OPENAI_ORG,
-    });
-    console.log(process.env.OPENAI_TOKEN)
-    console.log(process.env)
-  }
   async generateQuestions(
     formType: string,
     businessDescription: string,
@@ -33,7 +30,7 @@ class OpenAiRepositoryClass {
     //   body: JSON.stringify(prompt),
     // });
 
-    const res = await this.openai.completions.create({
+    const res = await openai.completions.create({
       prompt: promptStr,
       model: model,
       temperature: 0.5,
@@ -118,7 +115,7 @@ class OpenAiRepositoryClass {
     // console.log({ URL, model, max_tokens, modelType });
 
     const response = await (modelType == "chat"
-      ? this.openai.chat.completions.create({
+      ? openai.chat.completions.create({
           messages: [
             {
               role: "system",
@@ -130,7 +127,7 @@ class OpenAiRepositoryClass {
           temperature: 0.5,
           max_tokens: max_tokens,
         })
-      : this.openai.completions.create({
+      : openai.completions.create({
           prompt: promptStr,
           model: model,
           temperature: 0.5,
