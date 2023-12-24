@@ -50,14 +50,12 @@ jobs:
     - name: Load env
       run: |
         touch .env.local
-        echo "NEXT_PUBLIC_FB_CLIENT_API_KEY=${{ secrets.NEXT_PUBLIC_FB_CLIENT_API_KEY }}" >> .env.local
         echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env.local
         echo "NEXT_PUBLIC_URL_BASE=${{ secrets.NEXT_PUBLIC_URL_BASE }}" >> .env.local
         echo "OPENAI_ORG=${{ secrets.OPENAI_ORG }}" >> .env.local
         echo "NEXT_PUBLIC_FORM_URL=${{ secrets.NEXT_PUBLIC_FORM_URL }}" >> .env.local
         echo "OPENAI_TOKEN=${{ secrets.OPENAI_TOKEN }}" >> .env.local
         echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.local
-        echo "NEXT_PUBLIC_SECRET=${{ secrets.NEXT_PUBLIC_SECRET }}" >> .env.local
         echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env.local
         echo "REDIS_URL=${{ secrets.REDIS_URL }}" >> .env.local
         echo "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}" >> .env.local

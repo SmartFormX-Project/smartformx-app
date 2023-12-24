@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "gen-ans": "npx ts-node utils/scripts/form-ans.ts",
-    "worker": "dotenv -e .env.local -- npx tsx --watch app/(backend)/workers/analyse.ts",
+    "worker": "dotenv -e .env.local -- npx tsx watch app/(backend)/workers/analyse.ts",
     "app": "npm-run-all start worker"
   },
   "dependencies": {
