@@ -2,8 +2,8 @@ import { encodingForModel } from "tiktoken-node";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_TOKEN,
-  organization: process.env.OPENAI_ORG,
+  apiKey: "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",
+  organization: "org-HRMnDOgvRiZ44AKp6hhopSvw",
 });
 
 class OpenAiRepositoryClass {
