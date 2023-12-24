@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       metadata: metadata,
       discounts: [
         {
-          coupon: recurring > 1 ? "PV8iiKPB" : "",
+          coupon: recurring > 1 ? "lrNJEdzm" : "",
         },
       ],
       subscription_data: {

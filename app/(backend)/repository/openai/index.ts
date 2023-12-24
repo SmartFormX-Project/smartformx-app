@@ -1,4 +1,4 @@
-import tiktoken from "tiktoken-node";
+import { encodingForModel } from "tiktoken-node";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -12,7 +12,7 @@ class OpenAiRepositoryClass {
     businessDescription: string,
     plan: number
   ): Promise<any[] | null> {
-    const {  model } = getConfig(plan, 1000, "completitions");
+    const { model } = getConfig(plan, 1000, "completitions");
 
     var promptStr =
       `Gere as melhores 8 questões para um formulario de feedback do tipo "${formType}", do negócio "${businessDescription}". ` +
@@ -54,7 +54,7 @@ class OpenAiRepositoryClass {
     companyDescription: string,
     plan: number
   ): Promise<string | null> {
-    const {  model, max_tokens } = getConfig(plan, 0);
+    const { model, max_tokens } = getConfig(plan, 0);
 
     const prompt = {
       model: model,
@@ -292,7 +292,7 @@ function proccessRawInsights(data: any) {
 }
 
 function getTokensSize(model: string, prompt: string) {
-  var enc = tiktoken.encodingForModel(model);
+  var enc = encodingForModel(model);
   return enc.encode(prompt).length;
 }
 var OpenAiRepository = new OpenAiRepositoryClass();

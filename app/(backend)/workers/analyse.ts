@@ -2,8 +2,8 @@
 
 import { Worker, Queue } from "bullmq";
 import Redis from "ioredis";
-import prisma from "@/config/prisma";
-import OpenAiRepository from "@/app/(backend)/repository/openai";
+import prisma from "../../../config/prisma";
+import OpenAiRepository from "../../../app/(backend)/repository/openai";
 
 const connection = new Redis(process.env.REDIS_URL!, {
   maxRetriesPerRequest: null,
