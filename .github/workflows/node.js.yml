@@ -64,4 +64,9 @@ jobs:
     - name: Build
       run: pnpm build
 
+    - name: Run and restart project and worker
+      run: cd /root/actions-runner/_work/smartformx-app/smartformx-app
+    - run: pm2 restart 0
+    - run: pm2 restart 1
+
 
