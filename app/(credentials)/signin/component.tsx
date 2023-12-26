@@ -3,8 +3,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
 import { sfx_logo } from "@/assets";
-import { Button } from "@nextui-org/button";
-import { Input } from "@nextui-org/input";
+import { Button,Input } from "@nextui-org/react";
+// import {  } from "@nextui-org/input";
 
 import { signIn } from "next-auth/react";
 import Image from "next/image";

@@ -64,7 +64,7 @@ export default function SignUp() {
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     const user = session.data?.user;
-    setStep(steps.plans);
+  
     (async function () {
       if (session.status == "authenticated") {
         var subStatus = user?.subscribeStatus ?? "";

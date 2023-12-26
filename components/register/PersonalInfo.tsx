@@ -38,8 +38,8 @@ const PersonalInfo = ({ status, values, register, isValid, isSubmitted }: formDa
       <p className="mb-6 text-lg text-foreground-400">
         Por favor, forneça seu nome, endereço de e-mail e uma senha.
       </p>
-      <div className="">
-        <div className="relative mb-4 md:mb-5">
+      <div className="flex flex-col gap-4">
+       
           <Input
             classNames={{
               label: "font-medium text-md",
@@ -52,8 +52,7 @@ const PersonalInfo = ({ status, values, register, isValid, isSubmitted }: formDa
             isRequired
             {...register("user.name")}
           />
-        </div>
-        <div className="relative mb-4 md:mb-5">
+ 
           <Input
             classNames={{
               label: "font-medium  text-md",
@@ -70,8 +69,7 @@ const PersonalInfo = ({ status, values, register, isValid, isSubmitted }: formDa
             errorMessage={!isValid && isSubmitted && "Digite um email válido"}
             isRequired
           />
-        </div>
-        <div className="relative mb-4 md:mb-5">
+     
           <Input
             classNames={{
               label: "font-medium  text-md",
@@ -98,7 +96,7 @@ const PersonalInfo = ({ status, values, register, isValid, isSubmitted }: formDa
             isRequired
             {...register("user.password")}
           />
-        </div>
+  
       </div>
     </motion.div>
   );

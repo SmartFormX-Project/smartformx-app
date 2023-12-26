@@ -71,10 +71,12 @@ export default function RootLayout({
         </head>
       <body
         suppressHydrationWarning={true}
-        className={clsx(
+        className={
+          clsx(
           "poppins min-h-screen bg-background antialiased",
           poppins.className
-        )}
+        )
+      }
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div>{children}</div>

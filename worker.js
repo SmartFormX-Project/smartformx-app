@@ -1,5 +1,4 @@
 const path = require("path");
-const env = require("dotenv");
 module.exports = {
   webpack: (config, { isServer }) => {
     if (isServer && config.name === "server") {

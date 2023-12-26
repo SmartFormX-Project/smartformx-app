@@ -1,3 +1,5 @@
+import react from "react";
+
 export const metadata = {
   title: "Smart Forms",
   description: "Page description",
