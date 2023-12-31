@@ -149,7 +149,7 @@ export default function SignUp() {
         else console.log("INCABLE TO LOGIN");
         // setTimeout(() => {}, 5000);
       } else {
-        console.log(res.data.type);
+        // console.log(res.data.type);
       }
       updateLoad();
     } else {

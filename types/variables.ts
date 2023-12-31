@@ -26,7 +26,7 @@ export function getStatusStringCategoryForm(status?: CategoryEnum): string {
       return "Feedback de analise de experiência";
   
     default:
-      return "";
+      return "Personalizado";
   }
 }
 export function getStatusString(status: String): string {

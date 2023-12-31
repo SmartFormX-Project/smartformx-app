@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       metadata: metadata,
       discounts: [
         {
-          coupon: recurring > 1 ? "lrNJEdzm" : "",
+          coupon: recurring > 1 ? process.env.STRIPE_COUPON! : "",
         },
       ],
       subscription_data: {

@@ -42,7 +42,7 @@ export async function POST(req: Request) {
         provider: provider,
         password: await hash(user.password, 10),
         country: country,
-        business: {
+        Business: {
           create: {
             name: business.name,
             clients: business.clients,

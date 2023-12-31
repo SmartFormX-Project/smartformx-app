@@ -5,12 +5,14 @@ export async function GET(
   req: Request,
   { params }: { params: { businessId: string } }
 ) {
-  if (!params.businessId) {
+  const bid = params.businessId;
+  if (!bid) {
     console.log("no id provided");
     return NextResponse.json([], { status: 404 });
   }
+  
   const response = await prisma.form.findMany({
-    where: { businessId: params.businessId },
+    where: { businessId: bid },
     select: {
       id: true,
       title: true,

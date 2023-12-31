@@ -41,7 +41,7 @@ export default function ProfileModal({
     }
     console.log("user id not provide, problably you arent logged in");
   };
-  console.log(session);
+
 
   if (isLoading)
     return (
@@ -51,8 +51,11 @@ export default function ProfileModal({
         placement="bottom"
         isDismissable={false}
         className="animate-pulse flex space-x-4"
+        classNames={{
+          closeButton: "text-white",
+        }}
       >
-        <ModalHeader className="p-2 h-52">
+        <ModalHeader className="p-2 h-52" >
           <div className="bg-blue-500 w-full h-28 rounded-md" />
           <div className="flex flex-col justify-center items-center text-center absolute top-16 left-0 right-0">
             <div className="bg-slate-700 flex uppercase items-center justify-center rounded-2xl border-8 border-[#18181B] w-[100px] h-[100px]">
@@ -155,7 +158,7 @@ const CardPlan = ({
             <div className="flex opacity-50">
               {/* <FiCheck /> */}
               <span className="text-sm text-white font-medium ml-1">
-                {description}
+                {getStatusPlanName(description)}
               </span>
             </div>
           </div>
@@ -184,4 +187,17 @@ function formatDate(isoDateTime: string) {
   return `${day.toString().padStart(2, "0")}/${month
     .toString()
     .padStart(2, "0")}/${year}`;
+}
+
+function getStatusPlanName(name: string) {
+  switch (name) {
+    case "trialing":
+      return "Período de avaliação";
+    case "active":
+      return "Ativo";
+
+
+    default:
+      return "Pausado";
+  }
 }

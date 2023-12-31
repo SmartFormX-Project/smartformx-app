@@ -4,6 +4,8 @@ import tiktoken from "tiktoken-node";
 
 import { analyseQueue } from "@/app/(backend)/workers/analyse";
 
+import { Questions } from "@prisma/client";
+
 export async function GET(
   req: Request,
   { params }: { params: { formId: string } }
@@ -17,14 +19,14 @@ export async function GET(
   const form = await prisma.form.findUnique({
     where: { id: formId },
     select: {
-      questions: {
+      Questions: {
         select: {
-          Answears: { select: { answear: true }, take: 45 },
+          Answers: { select: { answear: true }, take: 45 },
           goal: true,
         },
       },
-      bus: {
-        select: { user: { select: { metadata: true, subscribeStatus: true } } },
+      Business: {
+        select: { User: { select: { metadata: true, subscribeStatus: true } } },
       },
     },
   });
@@ -33,22 +35,23 @@ export async function GET(
 
   // incomplete, incomplete_expired, trialing, active, past_due, canceled, or unpaid
   if (
-    form?.bus.user?.subscribeStatus != "active" &&
-    form?.bus.user?.subscribeStatus != "trialing"
+    form?.Business.User?.subscribeStatus != "active" &&
+    form?.Business.User?.subscribeStatus != "trialing"
   )
     return NextResponse.json({ type: "subscribe_issues" }, { status: 403 });
 
-  var goals = form.questions.map((element: any) => element.goal);
+  var goals = form.Questions.map((element: any) => element.goal);
 
-  const result = ProcessQuestionsToAIForm(form?.questions ?? []);
+  const result = ProcessQuestionsToAIForm(form?.Questions ?? []);
 
   const jsonQuestions = JSON.stringify(result);
+  
   var enc = tiktoken.encodingForModel("gpt-3.5-turbo");
   const tokens = enc.encode(jsonQuestions).length;
 
-  const { insights, level, answers } = JSON.parse(
-    form?.bus.user?.metadata as string
-  );
+  const metadata = form?.Business.User?.metadata!;
+  const { insights, level }: any = metadata;
+  
 
   const levelPlan = parseInt(level);
   const maxInsights = parseInt(insights);
@@ -62,19 +65,21 @@ export async function GET(
     maxInsights,
   });
 
+
   await prisma.form.update({
     data: { status: "analysing" },
     where: { id: params.formId },
   });
 
-  return NextResponse.json({ message: "processing analyse" }, { status: 200 });
+  return NextResponse.json({ message: "processing analyse" }, { status: 201 });
 }
 
 function ProcessQuestionsToAIForm(questions: any[]) {
+ console.log(questions);
   return questions
-    .map(({ Answears, goal }: any) =>
-      Answears.map((answear: any, index: any) => ({
-        [`${goal}Answear${index + 1}`]: answear.answear,
+    .map(({ Answers, goal }: any) =>
+    Answers.map((Answer: any, index: any) => ({
+        [`${goal}Answear${index + 1}`]: Answer.answear,
       }))
     )
     .reduce((acc, curr) => {

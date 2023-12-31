@@ -6,40 +6,79 @@ const openai = new OpenAI({
   organization: "org-HRMnDOgvRiZ44AKp6hhopSvw",
 });
 
+type Question = {
+  question: string;
+  inputType: "options" | "interval";
+  goal: string;
+  options?: string[];
+};
+type ResponseInsight = {
+  all_insights: {
+    title: string;
+    description: string;
+    type: string;
+  }[];
+  stats: {
+    title: string;
+    info: string;
+    value: string;
+  }[];
+  extra: string;
+  keywords: string[];
+  usage: string;
+};
 class OpenAiRepositoryClass {
   async generateQuestions(
     formType: string,
     businessDescription: string,
     plan: number
-  ): Promise<any[] | null> {
-    const { model } = getConfig(plan, 1000, "completitions");
-
+  ): Promise<Question[] | null> {
     var promptStr =
       `Gere as melhores 8 questões para um formulario de feedback do tipo "${formType}", do negócio "${businessDescription}". ` +
-      `Varie os tipos(options e interval(1-5)) de resposta para obter o melhor e preciso feedback.` +
-      `E retorne somente no seguinte formato JSON(one line): {questions: [{"question": string, "goal":(ex: qualidade), "type":(options ou interval), "options"(para answearType="options") : string[]}]}.`;
+      `Varie os tipos(options e interval(1-5)) de resposta para obter melhores feedback. cada questão deve conter: question, goal, inputType e options(se inputType!="interval").`;
 
-    const prompt = {
-      model: model,
-      prompt: promptStr,
-      temperature: 0.5,
-      max_tokens: 1000,
-    };
-    // var data = await fetcher(URL, {
-    //   method: "POST",
-    //   body: JSON.stringify(prompt),
-    // });
+    const gptResponse = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo-0613",
+      messages: [
+        {
+          role: "system",
+          content:
+            "considere que você é um especialista em experiência do cliente",
+        },
+        { role: "user", content: promptStr },
+      ],
 
-    const res = await openai.completions.create({
-      prompt: promptStr,
-      model: model,
-      temperature: 0.5,
-      max_tokens: 1000,
+      functions: [
+        {
+          name: "createQuestionsObj",
+          parameters: {
+            type: "object",
+            properties: {
+              questions: {
+                type: "array",
+                items: {
+                  question: { type: "string" },
+                  goal: { type: "string" },
+                  inputType: {
+                    type: "string",
+                    description: "tipo de entrada",
+                    enum: ["interval", "options"],
+                  },
+                  "options(if 'type' == options)": "array",
+                },
+              },
+            },
+            required: ["questions"],
+          },
+        },
+      ],
+      function_call: { name: "createQuestionsObj" },
+      temperature: 0.4,
     });
 
     try {
-      var dataFromAi = getFromRequest(res, "completitions");
-      const quests = proccessRawQuestions(dataFromAi);
+      const res = gptResponse.choices[0].message.function_call?.arguments;
+      var quests: Question[] = JSON.parse(res!).questions;
 
       return quests;
     } catch (error) {
@@ -51,36 +90,32 @@ class OpenAiRepositoryClass {
 
   async generateSolutionsByInsight(
     insight: string,
-    companyDescription: string,
-    plan: number
+    companyDescription: string
   ): Promise<string | null> {
-    const { model, max_tokens } = getConfig(plan, 0);
+    var promptStr = `Para esse tipo de empresa: ${companyDescription}. Gere uma unica ideia que soluciona esse problema: ${insight}. Não precisa descrever muito.`;
 
-    const prompt = {
-      model: model,
-      prompt: `${companyDescription} {${insight}}, `,
-      temperature: 0.5,
-      max_tokens: 2000,
-    };
-
-    var data = await fetcher("", {
-      method: "POST",
-      body: JSON.stringify(prompt),
+    const gptResponse = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      max_tokens: 500,
+      messages: [
+        {
+          role: "system",
+          content:
+            "você é um especialista em experiência do cliente e solução de problemas",
+        },
+        { role: "user", content: promptStr },
+      ],
+      temperature: 0.4,
     });
 
     try {
-      var dataFromAi = getFromRequest(data, "chat");
+      let solution = gptResponse.choices[0].message.content!;
 
-      let solution = "";
-      console.log("start parsing to obj...");
-
-      var dataObj = JSON.parse(JSON.stringify(dataFromAi));
-
-      console.log("finish parsing...");
       return solution;
     } catch (error) {
       console.log("formato invalido");
       console.log(error);
+      console.log(gptResponse.choices[0].message.content!);
 
       return null;
     }
@@ -88,212 +123,111 @@ class OpenAiRepositoryClass {
   async generateInsights(
     goals: string[],
     values: string,
-    plan: number,
-    insights: number
-  ): Promise<{
-    all_insights: { title: string; description: string; type: string }[];
-    keywords: string[];
-    sentiment: {
-      feeling: string;
-      explanation: string;
-      satisfactionLevel: string;
-    };
-    stats: { title: string; data: string; info: string }[];
-  } | null> {
-    var origin: "chat" | "completitions" = plan == 1 ? "completitions" : "chat";
+    level: number,
+    maxInsights: number
+  ): Promise<ResponseInsight | null> {
     var systemStr =
-      "considere que você é especialista em analise de feedbacks e clientes";
-    // let max = plan == "starter" ? 5 : plan == "essential" ? 8 : 12;
+      "considere que você é especialista em experiencia e comportamento do cliente, e analista de feedbacks. Sua funçao é Gerar analises contendo: insights com titulo, descriçao e se é negativo ou positivo apenas;palavras chaves precisas e contudentes da analise; resultado da analise, indice de satisfação e contexto de tendencias; nas stats obter titulo, um valor e explicação simples para o dado.";
+    var promptStr = `Dados os feedbacks sendo: as colunas ${goals}, para os valores: ${values}\n. faça uma análise aprofundada e detalhada desses feedbacks, forneça no máximo ${maxInsights} insights, identifique padrões ou tendências, palavras-chave, 4 principais estatísticas e o resultado.`;
 
-    var promptStr = `Dados os indexs ${goals}, para os valores: ${values}\n. faça uma análise aprofundada e detalhada desses feedbacks, forneça no máximo ${insights} insights, e identifique padrões ou tendências, palavras-chave, o principal sentimento, e 4 principais estatísticas. E retorne no seguinte formato JSON(one line): {all_insights(min 1 negativo): array[{title, description, type(pos ou neg)}]\n, keywords: array<string>[]\n, sentiment: {feeling, explanation, satisfactionLevel(%)}\n, stats: array[{title, data, info(sem virgulas)}]}`;
+    const config =
+      level != 3
+        ? { model: "gpt-3.5-turbo", max: level == 2 ? 4000 : 2500 }
+        : { model: "gpt-4", max: 2500 };
 
-    var size = getTokensSize("gpt-3.5-turbo", promptStr + " " + systemStr);
+    const gptResponse = await openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: systemStr,
+        },
+        { role: "user", content: promptStr },
+      ],
+      model: config.model,
+      temperature: 0.5,
+      max_tokens: config.max,
+      functions: [
+        {
+          name: "createInsightsObj",
+          parameters: {
+            type: "object",
+            properties: {
+              insights: {
+                type: "array",
+                description: "insights gerados a partir dos feedbacks",
+                items: {
+                  insightTitle: "string",
+                  insightDescription: "string",
+                  insightType: {
+                    type: "string",
+                    enum: ["positivo", "negativo"],
+                  },
+                },
+              },
+              keywords: {
+                type: "array",
+                description:
+                  "palavras chaves obtidos da analise e dos feedbacks",
+                items: {},
+              },
 
-    const { model, max_tokens, modelType } = getConfig(plan, size, origin);
-
-    // console.log(size);
-    // console.log({ URL, model, max_tokens, modelType });
-
-    const response = await (modelType == "chat"
-      ? openai.chat.completions.create({
-          messages: [
-            {
-              role: "system",
-              content: systemStr,
+              stats: {
+                type: "array",
+                description: "estatisticas obtidas a partir da analises",
+                items: {
+                  title: "string",
+                  data: "string",
+                  info: "string",
+                },
+              },
+              extra: {
+                type: "string",
+                description:
+                  "relatorio de pontos criticos e sentimentos identificados da analise e priorização de Ações",
+                items: {
+                  sastifaction: "string",
+                  trend: "string",
+                },
+              },
             },
-            { role: "user", content: promptStr },
-          ],
-          model: model,
-          temperature: 0.5,
-          max_tokens: max_tokens,
-        })
-      : openai.completions.create({
-          prompt: promptStr,
-          model: model,
-          temperature: 0.5,
-          max_tokens: max_tokens,
-        }));
+
+            required: ["insights", "keywords", "stats", "extra"],
+          },
+        },
+      ],
+      function_call: { name: "createInsightsObj" },
+    });
 
     try {
-      var dataFromAi = getFromRequest(response, modelType);
+      var usage = JSON.stringify(gptResponse.usage);
+      const res = gptResponse.choices[0].message.function_call!.arguments;
 
-      const { all_insights, keywords, sentiment, stats } =
-        proccessRawInsights(dataFromAi);
+      let { insights, keywords, stats, extra } = JSON.parse(res);
 
-      // console.log(response.usage?.prompt_tokens);
-      // console.log(response.usage?.completion_tokens);
-      // console.log(response.usage?.total_tokens);
+      const all_insights = (insights as []).map((e: any) => {
+        return {
+          title: e.title,
+          description: e.description,
+          type: e.sentiment,
+        };
+      });
+      stats = (stats as []).map((e: any) => {
+        return {
+          title: e.title,
+          value: String(e.value),
+          info: e.explanation,
+        };
+      });
 
-      return { all_insights, keywords, sentiment, stats };
+      return { all_insights, keywords, extra, stats, usage };
     } catch (error) {
       console.log("formato invalido");
       console.log(error);
-      console.log(response);
+      console.log(gptResponse);
 
       return null;
     }
   }
-}
-
-function getConfig(
-  plan: number,
-  tokens: number,
-  origin: "chat" | "completitions" = "chat"
-): {
-  // URL: string;
-  model: string;
-  max_tokens: number;
-  modelType: "chat" | "completitions";
-} {
-  var models_tokens: any = {
-    "gpt-2.5": 4096,
-    "gpt-3.5-turbo": 4096,
-    "gpt-3.5-turbo-16k": 16385,
-    "gpt-4": 8192,
-    "gpt-4-32k": 32768,
-  };
-
-  var max_tokens = 1200;
-  var model = "";
-
-  if (origin == "completitions") {
-    return {
-      // URL: process.env.OPENAI_URL_COMPLETITIONS as string,
-      model: "gpt-3.5-turbo-instruct",
-      max_tokens: max_tokens,
-      modelType: origin,
-    };
-  }
-
-  switch (plan) {
-    case 1:
-      model = "gpt-3.5-turbo";
-      break;
-    case 2:
-      if (tokens > 3000) model = "gpt-3.5-turbo-16k";
-      else model = "gpt-3.5-turbo";
-      break;
-    case 3:
-      // if (tokens > 7000) model = "gpt-4-32k";
-      model = "gpt-4";
-      break;
-
-    default:
-      break;
-  }
-
-  return {
-    // URL: process.env.OPENAI_URL_CHAT as string,
-    model: model,
-    max_tokens: max_tokens,
-    modelType: origin,
-  };
-}
-
-function getFromRequest(data: any, from: "chat" | "completitions") {
-  return (
-    from == "completitions"
-      ? data.choices[0].text
-      : data.choices[0].message.content
-  ) as string;
-}
-
-async function fetchWithTimeout(resource: any, options: any = {}) {
-  const { timeout = 120000 } = options;
-
-  const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), timeout);
-
-  const response = await fetch(resource, {
-    ...options,
-    signal: controller.signal,
-  });
-  clearTimeout(id);
-
-  return response;
-}
-
-const fetcher = (url: any, arg: any, ...args: any) =>
-  fetch(url, {
-    ...arg,
-    headers: {
-      "OpenAI-Organization": process.env.OPENAI_ORG as string,
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_TOKEN}`,
-    },
-    ...args,
-  } as any).then((res) => res.json());
-
-function proccessRawQuestions(data: any) {
-  const proccessed = JSON.parse(data);
-
-  return proccessed.questions;
-}
-function proccessRawInsights(data: any) {
-  var dataObj = JSON.parse(JSON.stringify(data));
-
-  return dataObj
-    .split("\n\n")
-    .filter((line: any) => line.trim() !== "")
-    .map((line: string) => {
-      const lineStr = line
-        .split("\n")
-        .filter((line: any) => line.trim() !== "");
-      var proccessedData = lineStr.map((e) => e.trim()).join("");
-
-      proccessedData = proccessedData.replaceAll("info:", '"info":');
-      proccessedData = proccessedData.replaceAll("data:", '"data":');
-      proccessedData = proccessedData.replaceAll("title:", '"title":');
-      proccessedData = proccessedData.replaceAll(
-        "description:",
-        '"description":'
-      );
-      proccessedData = proccessedData.replaceAll("type:", '"type":');
-      proccessedData = proccessedData.replace(
-        "all_insights:",
-        '"all_insights":'
-      );
-      proccessedData = proccessedData.replace("keywords:", '"keywords":');
-      proccessedData = proccessedData.replace("stats:", '"stats":');
-      proccessedData = proccessedData.replace("sentiment:", '"sentiment":');
-
-      proccessedData = proccessedData.replaceAll("feeling:", '"feeling":');
-      proccessedData = proccessedData.replaceAll(
-        "explanation:",
-        '"explanation":'
-      );
-      proccessedData = proccessedData.replaceAll(
-        "satisfactionLevel:",
-        '"satisfactionLevel":'
-      );
-
-      return JSON.parse(proccessedData);
-    })[0];
-}
-
-function getTokensSize(model: string, prompt: string) {
-  var enc = encodingForModel(model);
-  return enc.encode(prompt).length;
 }
 var OpenAiRepository = new OpenAiRepositoryClass();
 export default OpenAiRepository;

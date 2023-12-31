@@ -9,12 +9,10 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
+  Select, SelectItem , Input, Textarea
 } from "@nextui-org/react";
 import { FiPlus } from "react-icons/fi";
-import { Input, Textarea } from "@nextui-org/input";
 
-import { Avatar } from "@nextui-org/avatar";
-import { Select, SelectItem } from "@nextui-org/select";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import SmartFormService from "@/app/(backend)/services/SmartFormService";
@@ -159,7 +157,7 @@ const CustomSelect = ({ register, readonly = false }: any) => {
       variant="bordered"
       {...register("type")}
       classNames={{
-        // label: "group-data-[filled=true]:-translate-y-5",
+        mainWrapper: "mt-5",
         trigger: "min-h-unit-16",
         listboxWrapper: "max-h-[400px]",
       }}

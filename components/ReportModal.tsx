@@ -79,10 +79,7 @@ const ReportModal = ({
                   </SelectItem>
                 ))}
               </Select>
-              {/* <label htmlFor="attachments" className="mt-2 text-sm">Anexos: </label>
-              <div id="attachments" className="flex gap-2">
-                <UploadCard onChange={(p) => console.log(p)} />
-              </div> */}
+          
               <Textarea
                 fullWidth
                 label="Nos conte o que aconteceu:"

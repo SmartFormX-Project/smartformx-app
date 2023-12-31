@@ -15,6 +15,7 @@ class SmartFormServiceClass {
   }
 
   async createForm(body: any): Promise<{ data: any; status: any }> {
+  
     var response = await fetch(this.URL_BASE + "/api/form", {
       method: "POST",
       headers: {
@@ -36,7 +37,6 @@ class SmartFormServiceClass {
         "Content-Type": "application/json",
       },
     });
-    console.log(response.url);
 
     const data = await response.json();
     return { data: data, status: response.status };
@@ -110,6 +110,19 @@ class SmartFormServiceClass {
     const data = await response.json();
     return { data: data, status: response.status };
   }
+
+  async createSolution(topicAnalysesId: string): Promise<{ data: any; status: any }> {
+    var response = await fetch(this.URL_BASE + "/api/form/analyse/solution/" + topicAnalysesId, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    return { data: data, status: response.status };
+  }
+
   async checkAnalyseStatus(
     formId: any,
     status: string
