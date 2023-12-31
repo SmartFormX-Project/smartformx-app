@@ -1,11 +1,11 @@
 "use client";
 
-import { Questions } from "@/types/interfaces";
+import { Question } from "@/types/interfaces";
 import { FC, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 interface CarouselProps {
-  questions: Questions[];
+  questions: Question[];
 }
 
 const Carousel: FC<CarouselProps> = ({ questions }) => {

@@ -15,14 +15,14 @@ export const register = async () => {
 
     new Worker(
       "analyseForm",
-      async (job) => {
-        const { goals, jsonQuestions, tokens, plan, formId } = job?.data;
+      async (job): Promise<any> => {
+        const { goals, jsonQuestions, formId, levelPlan, maxInsights } = job?.data;
 
         const response = await OpenAiRepository.generateInsights(
           goals ?? [],
           jsonQuestions,
-          tokens,
-          plan
+          levelPlan,
+          maxInsights
         );
 
         if (!response) {
@@ -34,13 +34,12 @@ export const register = async () => {
         } else {
           await prisma.analyse.create({
             data: {
-              feeling: response.sentiment.feeling,
-              feelingDesc: response.sentiment.explanation,
               formId: formId,
-              satisfationLevel: response.sentiment.satisfactionLevel,
+              summary: response.extra,
+              usage: response.usage,
               keywords: response.keywords,
-              stats: { createMany: { data: response.stats } },
-              topics: {
+              Stats: { createMany: { data: response.stats } },
+              Topics: {
                 createMany: { data: response.all_insights },
               },
             },
