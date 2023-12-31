@@ -13,18 +13,18 @@ export async function GET(
     where: { shortId: params.formId, status: "in_progress" },
     select: {
       id: true,
-      bus: {
+      Business: {
         select: {
           name: true,
         },
       },
-      questions: {
+      Questions: {
         select: {
           id: true,
           question: true,
           goal: true,
           options: true,
-          type: true,
+          inputType: true,
         },
       },
     },
@@ -41,12 +41,12 @@ export async function POST(
   if (!params.formId) {
     return NextResponse.json("Id not found", { status: 404 });
   }
-  const response = await prisma.userAnswear.create({
+  const response = await prisma.userAnswers.create({
     data: {
       name: data.name,
       referenceCode: generateReferenceCode(),
       formId: params.formId,
-      answears: { createMany: { data: data.answears } },
+      Answers: { createMany: { data: data.answears } },
     },
   });
 

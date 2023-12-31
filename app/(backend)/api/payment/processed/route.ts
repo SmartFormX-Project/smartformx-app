@@ -10,7 +10,6 @@ export async function GET(req: NextRequest) {
   if (session.status == "complete") {
     const email = session.customer_email;
     const subs = session.subscription;
-    console.log(session);
 
     await prisma.user.update({
       where: { email: email },
@@ -18,12 +17,11 @@ export async function GET(req: NextRequest) {
         subscribeStatus: "trialing",
         stripeCustomerId: session.customer,
         stripeSubscriptionId: subs,
-        metadata: session.metadata
+        metadata: session.metadata,
       },
     });
     return NextResponse.redirect(
       new URL("signup?up=true", process.env.NEXT_PUBLIC_URL_BASE!)
     );
   }
-  console.log(session);
 }

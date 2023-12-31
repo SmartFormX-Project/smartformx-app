@@ -5,13 +5,11 @@ import Redis from "ioredis";
 import prisma from "../../../config/prisma";
 import OpenAiRepository from "../../../app/(backend)/repository/openai";
 
-const connection = new Redis(
-  "redis://:fad8d90836176cf55dc36716a57562dc@127.0.0.1:6379",
-  {
-    maxRetriesPerRequest: null,
-    enableReadyCheck: false,
-  }
-);
+const connection = new Redis("redis://:@localhost:6379/0", {
+  maxRetriesPerRequest: null,
+  enableReadyCheck: false,
+  password: "redis"
+});
 export const analyseQueue = new Queue("analyseQueueForm", {
   connection,
   defaultJobOptions: {
@@ -24,9 +22,11 @@ export const analyseQueue = new Queue("analyseQueueForm", {
   },
 });
 
+console.log(connection.status);
 const worker = new Worker(
   "analyseQueueForm",
   async (job) => {
+    console.log(connection.status);
     const { goals, jsonQuestions, formId, levelPlan, maxInsights } = job?.data;
     console.log("start analysing: " + formId);
     var startTime = performance.now();
@@ -37,18 +37,18 @@ const worker = new Worker(
       levelPlan,
       maxInsights
     );
-
     if (response) {
+      console.log("analyse finished");
+     
       try {
         const a = await prisma.analyse.create({
           data: {
             formId: formId,
-            feeling: response.sentiment.feeling,
-            feelingDesc: response.sentiment.explanation,
-            satisfationLevel: response.sentiment.satisfactionLevel,
+            usage: response.usage,
+            summary: response.extra,
             keywords: response.keywords,
-            stats: { createMany: { data: response.stats } },
-            topics: {
+            Stats: { createMany: { data: response.stats } },
+            Topics: {
               createMany: { data: response.all_insights },
             },
           },

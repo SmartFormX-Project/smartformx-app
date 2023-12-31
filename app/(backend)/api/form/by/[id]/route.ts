@@ -11,9 +11,9 @@ export async function GET(
   const response = await prisma.form.findUnique({
     where: { id: params.id },
     include: {
-      analyse: true,
-      _count: { select: { userAnswear: true } },
-      questions: {
+      Analyse: {include:{Stats: true, Topics: true}},
+      _count: { select: { UserAnswers: true } },
+      Questions: {
         select: { question: true, goal: true },
       },
     },

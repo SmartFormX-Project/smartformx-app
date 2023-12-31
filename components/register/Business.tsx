@@ -15,7 +15,27 @@ type formDataProps = {
 
 const BusinessInfo = ({ status, register }: formDataProps) => {
   const { variants } = useVariants({ status });
-
+  const businessCategories = [
+    "Tecnologia da Informação",
+    "Saúde e Bem-Estar",
+    "Alimentação e Bebidas",
+    "Varejo",
+    "Serviços Financeiros",
+    "Educação",
+    "Turismo e Hospitalidade",
+    "Construção e Imobiliária",
+    "Moda e Vestuário",
+    "Entretenimento",
+    "Energia e Sustentabilidade",
+    "Consultoria Empresarial",
+    "Transporte e Logística",
+    "Serviços Profissionais",
+    "Indústria Automotiva",
+    "Arte e Cultura",
+    "Agricultura e Agronegócio",
+    "Meio Ambiente",
+    "Startups e Empreendedorismo"
+  ];
   useEffect(() => {
     window.scroll(0, 0);
   }, []);
@@ -46,18 +66,23 @@ const BusinessInfo = ({ status, register }: formDataProps) => {
           {...register("business.name")}
         />
 
-        <Input
+        <Select
+          radius="sm"
           classNames={{
-            label: "font-medium text-md",
+            label: "font-medium text-md text-white",
           }}
           size="lg"
-          labelPlacement="outside"
           label="Categoria"
-          radius="sm"
-          placeholder="ex. Rodrigo Viagens"
-          isRequired
+          placeholder="Selecione uma categoria"
+          className="max-w-xs"
+          labelPlacement="outside"
           {...register("business.category")}
-        />
+          isRequired
+        >
+          {businessCategories.map((item: any) => (
+            <SelectItem key={item}>{item}</SelectItem>
+          ))}
+        </Select>
 
         <Select
           radius="sm"

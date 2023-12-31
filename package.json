@@ -7,8 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "gen-ans": "npx ts-node utils/scripts/form-ans.ts",
-    "worker": "npx tsx --watch 'app/(backend)/workers/analyse.ts'"
+    "gen-ans": "npx tsx utils/scripts/form-ans.ts",
+    "worker": "npx tsx --watch 'app/(backend)/workers/analyse.ts'",
+    "all": "npm-run-all worker dev"
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.9",

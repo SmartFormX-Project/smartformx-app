@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-   output = "../node_modules/.prisma/client"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -9,27 +9,25 @@ datasource db {
 }
 
 model User {
-  id                   String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name                 String
-  email                String  @unique
+  email                String   @unique
   provider             String
+  country              String
+  password             String?
+  createdAt            DateTime @default(now())
+  updateAt             DateTime @updatedAt
+  businessId           String   @unique @db.Uuid
+  stripeCustomerId     String?  @unique
+  stripeSubscriptionId String?  @unique
   tempToken            String?
-  verifiedEmail        Boolean @default(false)
-  stripeCustomerId     String? @unique
-  stripeSubscriptionId String? @unique
-  subscribeStatus      String  @default("unfinished")
+  verifiedEmail        Boolean  @default(false)
+  metadata             Json?
   paymentIntentStatus  String?
-  metadata             Json? //at fetch time - parse json and collect the name and send to session
+  subscribeStatus      String   @default("unfinished")
 
-  country  String
-  password String?
-
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-
-  businessId String    @unique @db.Uuid
-  business   Business  @relation(fields: [businessId], references: [id])
-  Reports    Reports[]
+  Reports  Reports[]
+  Business Business  @relation(fields: [businessId], references: [id])
 }
 
 model Business {
@@ -40,56 +38,58 @@ model Business {
   clients     String
   createdAt   DateTime @default(now())
   updateAt    DateTime @updatedAt
-  form        Form[]
-  user        User?
+
+  Forms Form[]
+  User  User?
 }
 
 model Form {
-  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title          String
-  description    String?
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   category       String
-  shortId        String  @unique
-  entrances      Int     @default(0)
-  extraEntrances Int     @default(0)
-  status         String  @default("in_progress")
-  limitAns       Int     @default(45)
+  status         String   @default("in_progress")
+  businessId     String   @db.Uuid
+  createdAt      DateTime @default(now())
+  updateAt       DateTime @updatedAt
+  description    String?
+  title          String
+  entrances      Int      @default(0)
+  shortId        String   @unique
+  limitAns       Int      @default(45)
+  extraEntrances Int      @default(0)
 
-  businessId String   @db.Uuid
-  createdAt  DateTime @default(now())
-  updateAt   DateTime @updatedAt
-
-  analyse     Analyse?
-  bus         Business      @relation(fields: [businessId], references: [id])
-  questions   Questions[]
-  userAnswear UserAnswear[]
+  Analyse     Analyse?
+  Business    Business      @relation(fields: [businessId], references: [id])
+  Questions   Questions[]
+  UserAnswers UserAnswers[]
 }
 
 model Questions {
-  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   question  String
-  type      String
+  formId    String   @db.Uuid
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+  options   String[] @default([])
   goal      String
-  options   String[]
-  formId    String     @db.Uuid
-  createdAt DateTime   @default(now())
-  updateAt  DateTime   @updatedAt
-  form      Form       @relation(fields: [formId], references: [id])
-  Answears  Answears[]
+  inputType String
+
+  Answers Answers[]
+  Form    Form      @relation(fields: [formId], references: [id])
 }
 
-model UserAnswear {
-  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+model UserAnswers {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name          String
-  referenceCode String     @unique
-  formId        String     @db.Uuid
-  createdAt     DateTime   @default(now())
-  updateAt      DateTime   @updatedAt
-  answears      Answears[]
-  form          Form       @relation(fields: [formId], references: [id])
+  referenceCode String   @unique
+  formId        String   @db.Uuid
+  createdAt     DateTime @default(now())
+  updateAt      DateTime @updatedAt
+
+  Answers Answers[]
+  Form    Form      @relation(fields: [formId], references: [id])
 }
 
-model Answears {
+model Answers {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   questionId    String   @db.Uuid
   userAwnsearId String   @db.Uuid
@@ -97,65 +97,58 @@ model Answears {
   createdAt     DateTime @default(now())
   updateAt      DateTime @updatedAt
 
-  userAwnser UserAnswear @relation(fields: [userAwnsearId], references: [id])
-  question   Questions   @relation(fields: [questionId], references: [id])
+  Question   Questions   @relation(fields: [questionId], references: [id])
+  UserAnswer UserAnswers @relation(fields: [userAwnsearId], references: [id])
 }
 
 model Analyse {
-  id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  formId           String          @unique @db.Uuid
-  feeling          String?
-  feelingDesc      String?
-  keywords         String[]
-  satisfationLevel String
-  createdAt        DateTime        @default(now())
-  updateAt         DateTime        @updatedAt
-  form             Form            @relation(fields: [formId], references: [id])
-  topics           TopicAnalyses[]
-  stats            Stats[]
-}
-
-model Stats {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-
-  title String
-  info  String
-  data  String
-
-  analyseId String? @db.Uuid
-
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  formId    String   @unique @db.Uuid
+  summary   String
+  usage     Json
+  keywords  String[]
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
 
-  Analyses Analyse? @relation(fields: [analyseId], references: [id])
+  Form   Form            @relation(fields: [formId], references: [id])
+  Stats  Stats[]
+  Topics TopicAnalyses[]
+}
+
+model Stats {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title     String
+  info      String
+  value     String
+  analyseId String?  @db.Uuid
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  Analyse Analyse? @relation(fields: [analyseId], references: [id])
 }
 
 model TopicAnalyses {
-  id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title        String
   type         String
   description  String
   howToImprove String?
+  createdAt    DateTime @default(now())
+  updateAt     DateTime @updatedAt
+  analyseId    String?  @db.Uuid
 
-  analyseId String? @db.Uuid
-
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-
-  Analyses Analyse? @relation(fields: [analyseId], references: [id])
+  Analyse Analyse? @relation(fields: [analyseId], references: [id])
 }
 
 model Reports {
-  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title       String
   category    String
   description String
   media       String?
+  userId      String   @db.Uuid
+  createdAt   DateTime @default(now())
+  updateAt    DateTime @updatedAt
 
-  userId String @db.Uuid
-
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-
-  User User? @relation(fields: [userId], references: [id])
+  User User @relation(fields: [userId], references: [id])
 }

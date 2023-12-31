@@ -1,4 +1,3 @@
-
 "use client";
 import Header from "@/components/Header";
 
@@ -26,7 +25,6 @@ export default function HomePage() {
 
   // var response = await AnalyseService.getForms(data?.user?.businessId ?? "");
   // var forms: Form[] = response.data;
-
   const { data, isLoading, error } = useSWR(
     AnalyseService.URL_GET_FORMS + session.data?.user?.businessId,
     fetcher,
@@ -59,36 +57,17 @@ export default function HomePage() {
 
   return (
     <div className="w-full h-full flex flex-col justify-between overflow-x-hidden">
+      {session.status!="loading" &&
       <Header
-        busId={session.data?.user?.businessId ?? ""}
-        name={session.data?.user?.name ?? ""}
-        userId={session.data?.user?.id ?? ""}
+      busId={session.data?.user?.businessId ?? ""}
+      name={session.data?.user?.name ?? ""}
+      userId={session.data?.user?.id ?? ""}
       />
+    }
 
       <FormListComponent loading={isLoading} data={data} />
-      {/* {data ? (
-        <>
-          <h1 className="text-black text-3xl font-light animate-fade-up ">
-            Ultimos insights
-          </h1>
-
-          <ol className={`sm:flex sm:overflow-x-auto  w-full `}>
-            {(data as Form[]).map((e, i) => {
-              return <CardForm key={i} e={e} i={i} />;
-            })}
-          </ol>
-        </>
-      ) : (
-        <div className="flex flex-col justify-center items-center animate-fade-up">
-          <Image src={rocket3d} alt="Rocket" width={300} height={300} />
-
-          <h1 className="font-bold text-6xl text-black text-center mt-4">
-            Crie seu primeiro smartform
-          </h1>
-        </div>
-      )} */}
-
-      <InsightModal />
+      {session.status!="loading" &&
+      <InsightModal />}
     </div>
   );
 }
@@ -108,7 +87,7 @@ const FormListComponent = ({
         </div>
       </div>
     );
-  else if (data)
+  else if (data && data.length > 0)
     return (
       <>
         <h1 className="text-black text-3xl font-light animate-fade-up ">

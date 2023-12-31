@@ -1,20 +1,26 @@
 import { CategoryEnum, StatusEnum } from "./variables";
-
-export interface User {
+interface User {
   id: string;
   name: string;
   email: string;
   provider: string;
-  plan?: string;
   country: string;
-  password?: string;
+  password?: string | null;
   createdAt: Date;
   updateAt: Date;
   businessId: string;
-  business: Business;
+  stripeCustomerId?: string | null;
+  stripeSubscriptionId?: string | null;
+  tempToken?: string | null;
+  verifiedEmail: boolean;
+  metadata?: Record<string, any> | null;
+  paymentIntentStatus?: string | null;
+  subscribeStatus: string;
+  Reports: Report[];
+  Business: Business;
 }
 
-export interface Business {
+interface Business {
   id: string;
   name: string;
   description: string;
@@ -22,92 +28,109 @@ export interface Business {
   clients: string;
   createdAt: Date;
   updateAt: Date;
-  form: Form[];
-  user?: User;
+  Forms: Form[];
+  User?: User | null;
 }
 
 export interface Form {
-  id?: string;
-  title?: string;
-  description?: string;
-  shortId?: string;
-  category?: CategoryEnum;
-  entrances?: number;
+  id: string;
+  _count: any;
+  category: CategoryEnum;
   status: StatusEnum;
-  businessId?: string;
+  businessId: string;
   createdAt: Date;
-  _count?: any;
   updateAt: Date;
-  analyse?: Analyse;
-  bus?: Business;
-  questions?: Questions[];
-  userAnswear?: UserAnswear[];
+  description?: string | null;
+  title: string;
+  entrances: number;
+  shortId: string;
+  limitAns: number;
+  extraEntrances: number;
+  Analyse?: Analyse | null;
+  Business: Business;
+  Questions: Question[];
+  UserAnswers: UserAnswer[];
 }
 
-export interface Questions {
+export interface Question {
   id: string;
   question: string;
-  goal: string;
-  type: string;
-  options: string[];
   formId: string;
   createdAt: Date;
   updateAt: Date;
-  form: Form;
+  options: string[];
+  goal: string;
+  inputType: string;
+  Answers: Answer[];
+  Form: Form;
 }
 
-export interface UserAnswear {
+interface UserAnswer {
   id: string;
   name: string;
   referenceCode: string;
   formId: string;
   createdAt: Date;
   updateAt: Date;
-  answears: Answears[];
-  form: Form;
+  Answers: Answer[];
+  Form: Form;
 }
 
-export interface Answears {
+interface Answer {
   id: string;
   questionId: string;
   userAwnsearId: string;
   answear: string;
   createdAt: Date;
   updateAt: Date;
-  userAwnser: UserAnswear;
+  Question: Question;
+  UserAnswer: UserAnswer;
 }
-interface Analyse {
+
+export interface Analyse {
   id: string;
   formId: string;
-  feeling: string;
-  feelingDesc: string;
+  summary: string;
+  usage: Record<string, any>;
   keywords: string[];
   createdAt: Date;
   updateAt: Date;
-  form: Form;
-  topics: TopicAnalyses[];
-  stats: Stats[];
+  Form: Form;
+  Stats: Stats[];
+  Topics: TopicAnalyses[];
 }
 
 interface Stats {
   id: string;
   title: string;
   info: string;
-  data: string;
-  analyseId?: string;
+  value: string;
+  analyseId?: string | null;
   createdAt: Date;
   updateAt: Date;
-  Analyses?: Analyse;
+  Analyse?: Analyse | null;
 }
 
-interface TopicAnalyses {
+export interface TopicAnalyses {
   id: string;
   title: string;
   type: string;
   description: string;
-  howToImprove?: string;
-  analyseId?: string;
+  howToImprove?: string | null;
   createdAt: Date;
   updateAt: Date;
-  Analyses?: Analyse;
+  analyseId?: string | null;
+  Analyse?: Analyse | null;
+}
+
+interface Report {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  media?: string | null;
+  userId: string;
+  createdAt: Date;
+  updateAt: Date;
+  User: User;
 }

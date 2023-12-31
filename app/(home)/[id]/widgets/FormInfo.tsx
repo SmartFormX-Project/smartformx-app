@@ -21,8 +21,9 @@ export default function FormDescription({
   formData: Form;
   onOpenModalShare: () => void;
 }) {
+
   var convertion: number =
-    formData._count.userAnswear / (formData.entrances ?? 1);
+    formData._count.UserAnswers / (formData.entrances ?? 1);
 
   const closeForm = async () => {
     const response = await SmartFormService.updateFormStatus(
@@ -98,8 +99,8 @@ export default function FormDescription({
       <div className="space-y-5 mt-6 mb-6">
         <CardComponent
           title="Respostas"
-          percentage={formData._count.userAnswear / 100}
-          label={formData._count.userAnswear + " repostas"}
+          percentage={(formData._count.UserAnswers / formData.limitAns).toFixed(2)}
+          label={formData._count.UserAnswers + " repostas"}
         />
         <CardComponent
           title="Conversão"
@@ -108,11 +109,8 @@ export default function FormDescription({
         />
       </div>
       <h3 className="text-white/70 mb-4 text-xl">Questões</h3>
-      {/* <FeedbackContent /> */}
-
-      {/* <div className="container"> */}
-      <Carousel questions={formData.questions ?? []} />
-      {/* </div> */}
+      <Carousel questions={formData.Questions ?? []} />
+    
       <BiSolidQuoteAltLeft
         size={150}
         className="text-white/[10%] absolute bottom-0"

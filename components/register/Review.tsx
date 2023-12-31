@@ -13,8 +13,8 @@ type reviewBillingProps = {
 const Review = ({ status, planSelected }: reviewBillingProps) => {
   const { variants } = useVariants({ status });
 
-  const semesterRecurring = planSelected.recurring == "semester";
-  console.log(planSelected);
+  const semesterRecurring = planSelected.recurring == 6;
+ 
   return (
     <motion.div
       variants={variants}
