@@ -5,11 +5,13 @@ import Redis from "ioredis";
 import prisma from "../../../config/prisma";
 import OpenAiRepository from "../../../app/(backend)/repository/openai";
 
-const connection = new Redis("redis://:@localhost:6379/0", {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: false,
-  password: "redis"
-});
+const connection = new Redis(
+  "redis://:fad8d90836176cf55dc36716a57562dc@127.0.0.1:6379",
+  {
+    maxRetriesPerRequest: null,
+    enableReadyCheck: false,
+  }
+);
 export const analyseQueue = new Queue("analyseQueueForm", {
   connection,
   defaultJobOptions: {
