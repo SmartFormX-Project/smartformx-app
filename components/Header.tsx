@@ -79,9 +79,9 @@ const Header = ({
             <DropdownItem key="data" onClick={modalProfile.onOpen}>
               Meus dados
             </DropdownItem>
-            <DropdownItem key="report" onClick={modalReport.onOpen}>
+            {/* <DropdownItem key="report" onClick={modalReport.onOpen}>
               Precisa de ajuda?
-            </DropdownItem>
+            </DropdownItem> */}
 
             <DropdownItem
               color="danger"

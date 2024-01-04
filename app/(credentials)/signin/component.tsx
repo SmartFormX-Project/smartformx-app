@@ -32,7 +32,8 @@ export default function SignInForm() {
     });
 
     if (session?.ok) r.push("/");
-    else if (session?.error)
+    else if (session?.error){
+      udpateLoading();
       toast.error(session.error, {
         position: "top-right",
         autoClose: 5000,
@@ -43,7 +44,7 @@ export default function SignInForm() {
         progress: undefined,
         theme: "dark",
       });
-    udpateLoading();
+    }
   };
   const udpateLoadingG = () => setLoadingG((prev) => !prev);
   const udpateLoading = () => setLoading((prev) => !prev);
