@@ -15,16 +15,18 @@ import { rocket3d } from "@/assets";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import UserService from "../(backend)/services/UserServices";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import ModalPaymentIssue from "@/components/ModalPaymentIssue";
+import { useDisclosure } from "@nextui-org/react";
 
 const fetcher = (arg: any, ...args: any) =>
   fetch(arg, ...args).then((res) => res.json());
 
 export default function HomePage() {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isMobile, setMobileMode] = useState<boolean>(false);
   var session = useSession();
 
-  // var response = await AnalyseService.getForms(data?.user?.businessId ?? "");
-  // var forms: Form[] = response.data;
   const { data, isLoading, error } = useSWR(
     AnalyseService.URL_GET_FORMS + session.data?.user?.businessId,
     fetcher,
@@ -34,6 +36,18 @@ export default function HomePage() {
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     const user = session.data?.user;
+
+    if (window) {
+      setMobileMode(window.matchMedia("(max-width: 600px)").matches);
+    }
+
+    if (
+      user &&
+      user.subscribeStatus != "trialing" &&
+      user.subscribeStatus != "active"
+    ) {
+      onOpen();
+    }
 
     (async function () {
       if (session.status == "authenticated" && query.get("up")) {
@@ -54,7 +68,7 @@ export default function HomePage() {
       }
     })();
   }, [session]);
-  let isMobile = window.matchMedia("(max-width: 600px)").matches;
+
   return (
     <div className="w-full h-full flex flex-col justify-between overflow-x-hidden z-0">
       {session.status != "loading" && (
@@ -69,7 +83,11 @@ export default function HomePage() {
       {session.status != "loading" && <InsightModal />}
 
       {isMobile && <div></div>}
-      
+      <ModalPaymentIssue
+        isOpen={isOpen}
+        onChange={onOpenChange}
+        onOpen={onOpen}
+      />
     </div>
   );
 }
