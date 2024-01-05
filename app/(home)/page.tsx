@@ -54,20 +54,22 @@ export default function HomePage() {
       }
     })();
   }, [session]);
-
+  let isMobile = window.matchMedia("(max-width: 600px)").matches;
   return (
-    <div className="w-full h-full flex flex-col justify-between overflow-x-hidden">
-      {session.status!="loading" &&
-      <Header
-      busId={session.data?.user?.businessId ?? ""}
-      name={session.data?.user?.name ?? ""}
-      userId={session.data?.user?.id ?? ""}
-      />
-    }
+    <div className="w-full h-full flex flex-col justify-between overflow-x-hidden z-0">
+      {session.status != "loading" && (
+        <Header
+          busId={session.data?.user?.businessId ?? ""}
+          name={session.data?.user?.name ?? ""}
+          userId={session.data?.user?.id ?? ""}
+        />
+      )}
 
       <FormListComponent loading={isLoading} data={data} />
-      {session.status!="loading" &&
-      <InsightModal />}
+      {session.status != "loading" && <InsightModal />}
+
+      {isMobile && <div></div>}
+      
     </div>
   );
 }
@@ -91,7 +93,7 @@ const FormListComponent = ({
     return (
       <>
         <h1 className="text-black text-3xl font-light animate-fade-up ">
-          Ultimos insights
+          Ultimos Formulários
         </h1>
 
         <ol className={`sm:flex sm:overflow-x-auto  w-full `}>

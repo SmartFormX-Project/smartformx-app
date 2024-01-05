@@ -17,9 +17,11 @@ import SmartFormService from "@/app/(backend)/services/SmartFormService";
 export default function FormDescription({
   formData,
   onOpenModalShare,
+  isMobile = false
 }: {
   formData: Form;
   onOpenModalShare: () => void;
+  isMobile?: boolean
 }) {
 
   var convertion: number =
@@ -36,8 +38,8 @@ export default function FormDescription({
     }
   };
 
-  return (
-    <div className="flex-none bg-black w-2/6 rounded-2xl p-5 relative  animate-fade-up">
+  const DesktopMode=
+    <div className={`flex-none bg-black ${isMobile ? "w-full mt-6": "w-2/6"} rounded-2xl p-5 relative  animate-fade-up`}>
       <header className="flex justify-between items-center">
         <div>
           <h1 className="font-bold">
@@ -115,8 +117,10 @@ export default function FormDescription({
         size={150}
         className="text-white/[10%] absolute bottom-0"
       />
-    </div>
-  );
+    </div>;
+
+    return DesktopMode;
+  
 }
 
 const CardComponent = ({ title, percentage, label }: any) => {

@@ -8,12 +8,12 @@ class ChatwootWidget extends React.Component<{
   uid: string;
 }> {
   componentDidMount() {
-    
+    let isMobile = window.matchMedia("(max-width: 600px)").matches;
     (window as any).chatwootSettings = {
       hideMessageBubble: false,
       position: "right", // This can be left or right
       locale: "BR", // Language to be set
-      type: "expanded_bubble",
+      type: "standard",
       darkMode: "auto",
       launcherTitle: "Precisa de ajuda?",
     };

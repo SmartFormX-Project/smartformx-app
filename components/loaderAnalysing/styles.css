@@ -1,41 +1,3 @@
-/* Created by Tivotal */
-
-/* .wrapper .loader {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  animation: anim 2s linear infinite;
-}
-
-@keyframes anim {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-    box-shadow: 1px 5px 2px #e65c00;
-  }
-  50% {
-    transform: translate(-50%, -50%) rotate(180deg);
-    box-shadow: 1px 5px 2px #18b201;
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
-    box-shadow: 1px 5px 2px #0456c8;
-  }
-}
-
-.wrapper .loader::before {
-  position: absolute;
-  content: "";
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  border-radius: 50%;
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-} */
 
 .wrapper span {
   color: #fff;
@@ -52,6 +14,7 @@
     color: #0bec7c;
   }
 }
+
 .wrapper{
   display: flex;
   flex-direction: column;
@@ -168,5 +131,56 @@
 
   100% {
     transform: translateY(-50%) scale(0) translateX(395px);
+  }
+}
+
+@keyframes animateDotMobile {
+  0% {
+    transform: translateY(-50%) scale(0);
+  }
+
+  5% {
+    transform: translateY(-50%) scale(1);
+  }
+
+  15%,
+  20% {
+    transform: translateY(-50%) scale(1);
+
+    box-shadow: 0 0 0 4px #0bec7c22, 0 0 0 10px #0bec7c22, 0 0 20px #0bec7c,
+      0 0 40px #0bec7c, 0 0 40px 5px #0bec7c, 0 0 60px 10px #0bec7c;
+  }
+
+  40% {
+    transform: translateY(-50%) scale(1) translateX(295px);
+  }
+
+  80% {
+    transform: translateY(-50%) scale(1) translateX(295px);
+
+    box-shadow: 0 0 0 4px #0bec7c22, 0 0 0 10px #0bec7c22, 0 0 20px #0bec7c,
+      0 0 40px #0bec7c, 0 0 40px 5px #0bec7c, 0 0 60px 10px #0bec7c;
+  }
+
+  95% {
+    transform: translateY(-50%) scale(1) translateX(295px);
+
+    box-shadow: none;
+  }
+
+  100% {
+    transform: translateY(-50%) scale(0) translateX(295px);
+  }
+}
+@media (max-width: 600px) {
+  .wrapper{
+
+    width: 400px;
+  }
+  .loader::after {
+    animation: animateDotMobile 10s linear infinite;
+  }
+  .loader {
+    width: 300px;
   }
 }

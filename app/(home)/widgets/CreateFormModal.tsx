@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import SmartFormService from "@/app/(backend)/services/SmartFormService";
 
-import { general3d, experence3d, quality3d, product3d } from "@/assets";
+import { general3d, experence3d, quality3d, product3d, lupa3d } from "@/assets";
 import Image from "next/image";
 
 export default function InsightModal() {
@@ -44,7 +44,7 @@ export default function InsightModal() {
       window.location.reload();
     }
   };
-
+  let isMobile = window.matchMedia("(max-width: 600px)").matches;
   return (
     <>
       <Button
@@ -63,6 +63,7 @@ export default function InsightModal() {
         onOpenChange={onOpenChange}
         placement="bottom"
         isDismissable={false}
+        //  classNames={{footer}}
       >
         <ModalContent>
           {(onClose: any) => (
@@ -74,7 +75,7 @@ export default function InsightModal() {
                 <Input
                   type="text"
                   label="Titulo"
-                  placeholder="Enter a title"
+                  placeholder="Digite um titulo para o form."
                   isRequired
                   labelPlacement="outside"
                   {...register("title")}
@@ -82,7 +83,7 @@ export default function InsightModal() {
                 />
                 <Textarea
                   label="Description"
-                  placeholder="Enter a description"
+                  placeholder="Digite uma descrição"
                   labelPlacement="outside"
                   {...register("description")}
                   readOnly={loading}
@@ -90,12 +91,12 @@ export default function InsightModal() {
 
                 <CustomSelect register={register} readOnly={loading} />
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className={isMobile?"justify-start":"justify-end"}>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cancelar
                 </Button>
                 <Button type="submit" color="primary" isLoading={loading}>
-                  Adicionar e criar form
+                  Criar form
                 </Button>
               </ModalFooter>
             </form>
@@ -120,7 +121,7 @@ const CustomSelect = ({ register, readonly = false }: any) => {
       name: "Feedback Geral",
       value: "general",
       description: "Coletar respostas variadas",
-      icon: general3d,
+      icon: lupa3d,
     },
     {
       id: 2,
@@ -131,13 +132,20 @@ const CustomSelect = ({ register, readonly = false }: any) => {
     },
     {
       id: 3,
+      name: "Feedback de Atendimento",
+      value: "customer_service",
+      description: "Foco no atendimento ao cliente",
+      icon: general3d,
+    },
+    {
+      id: 4,
       name: "Feedback de Experiência",
       value: "experence",
       description: "Foco na experiência do cliente com seu negócio",
       icon: experence3d,
     },
     {
-      id: 4,
+      id: 5,
       name: "Feedback de Produto",
       value: "product",
       description: "Coletar resposta sobre seus produtos",

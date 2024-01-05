@@ -48,11 +48,11 @@ export default function ProfileModal({
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        placement="bottom"
+        placement="bottom-center"
         isDismissable={false}
         className="animate-pulse flex space-x-4"
         classNames={{
-          closeButton: "text-white",
+          closeButton: "text-white"
         }}
       >
         <ModalHeader className="p-2 h-52" >
@@ -64,7 +64,7 @@ export default function ProfileModal({
             <h2 className="text-xl font-bold mt-2 bg-slate-700 h-10 w-10"></h2>
           </div>
         </ModalHeader>
-        <ModalBody>
+        <ModalBody className="mb-6">
           <div className="bg-slate-700 h-52 w-full rounded-lg mt-4"></div>
 
           <div className="mt-4 grid grid-cols-2 gap-4">
@@ -86,6 +86,7 @@ export default function ProfileModal({
             <p className="bg-slate-700 h-14 w-10"></p>
           </div>
         </ModalBody>
+
       </Modal>
     );
   return (

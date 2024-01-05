@@ -15,7 +15,7 @@ import { FiUser } from "react-icons/fi";
 import ProfileModal from "./ProfileModal";
 import ReportModal from "./ReportModal";
 import Image from "next/image";
-import { sfx_full, sfx_full_light } from "@/assets";
+import { sfx_icon, sfx_full_light } from "@/assets";
 
 const Header = ({
   name,
@@ -28,23 +28,15 @@ const Header = ({
 }) => {
   const modalProfile = useDisclosure();
   const modalReport = useDisclosure();
-
+  let isMobile = window.matchMedia("(max-width: 600px)").matches;
+  
+  const chatwootBtn = document.querySelector(`.woot-widget-bubble`);
   return (
     <header className="block text-center w-full">
       <div className="flex justify-between items-center">
-        {/* <div>
-          {" "}
-          <h1 className="flex font-bold text-3xl text-black">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-              {" "}
-              Smart
-              <br />
-            </span>
-            FormX
-          </h1>
-        </div> */}
 
-        <Image src={sfx_full_light} alt="SmartFormX" className="w-1/6"/>
+
+        <Image src={isMobile? sfx_icon: sfx_full_light} alt="SmartFormX" className={isMobile?"w-1/12" :"w-1/6"}/>
         <Dropdown>
           <DropdownTrigger>
             <Chip
