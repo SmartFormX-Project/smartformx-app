@@ -57,14 +57,13 @@ export default function SignInForm() {
     udpateLoadingG();
     if (session?.ok) location.reload();
   };
-
   return (
-    <section className="bg-gradient-to-b p-6 h-screen">
-      <div className="max-w-2xl rounded-2xl mx-auto px-4 py-6 sm:px-6 flex flex-col justify-between h-full border-white/20 border-medium">
-        {/* <Header onClick={() => location.replace("/")} /> */}
+    <section className="bg-[#121212] py-12 h-screen">
+      <div className={"overflow-hidden shadow-md shadow-[#1c1c1c] relative bg-[#1c1c1c] max-w-xl mx-auto md:rounded-tl-[50px] md:rounded-br-[50px] h-full box-anim-clock"}>
+      <div className=" h-auto z-10 inset-1 absolute md:rounded-tl-[50px] md:rounded-br-[50px] bg-[#1c1c1c] max-w-2xl mx-auto flex flex-col p-4 sm:px-6 justify-between">
         <div className="max-w-3xl mx-auto mt-12 flex flex-col justify-center items-center">
           <Image src={sfx_logo} alt="" />
-          <h1 className="text-5xl font-bold text-foreground-500">Conecte-se</h1>
+          <h1 className="text-4xl font-light text-foreground-500 mt-4">Conecte-se</h1>
         </div>
         <div className="">
           <div className="max-w-sm mx-auto">
@@ -117,37 +116,10 @@ export default function SignInForm() {
                 </div>
               </div>
             </form>
-            {/* <div className="flex items-center my-6">
-              <div
-                className="border-t border-gray-300 grow mr-3"
-                aria-hidden="true"
-              ></div>
-              <div className="text-gray-300">Ou</div>
-              <div
-                className="border-t border-gray-300 grow ml-3"
-                aria-hidden="true"
-              ></div>
-            </div>
-            <form>
-              <div className="flex flex-wrap -mx-3">
-                <div className="w-full px-3">
-                  <Button
-                    fullWidth
-                    size="lg"
-                    variant="flat"
-                    className="bg-white border border-gray-300"
-                    onClick={onGoogleSignIn}
-                    startContent={<FcGoogle size={20} />}
-                    isLoading={loadingG}
-                  >
-                    Continue com o Google
-                  </Button>
-                </div>
-              </div>
-            </form> */}
+           
           </div>
         </div>
-        <div className="text-gray-600 text-center mt-6">
+        <div className="text-foreground-400 text-center mt-6">
           Você não tem uma conta?{" "}
           <Link
             href="/signup"
@@ -155,6 +127,7 @@ export default function SignInForm() {
           >
             Inscrever-se
           </Link>
+        </div>
         </div>
       </div>
 

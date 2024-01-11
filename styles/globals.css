@@ -23,6 +23,54 @@
   .pulse {
     animation: pulse-animation 2s infinite;
   }
+  .anim-clock{
+    animation: clock-animation 8s linear infinite;
+    animation-delay: -4s;
+  }
+  .anim-clock-no-delay{
+    animation: clock-animation 8s linear infinite;
+  }
+
+.box-anim-clock{
+
+}
+
+.box-anim-clock::before {
+  opacity: 0.4;
+content: "";
+position: absolute;
+top: -30%;
+left: -19%;
+width: 350px;
+height: 550px;
+background: linear-gradient(60deg, transparent, #8777E0, #8777E0);
+transform-origin: bottom right;
+animation: clock-animation 10s linear infinite;
+animation-delay: -5s;
+
+}
+.box-anim-clock::after {
+  opacity: 0.4;
+  content: "";
+  position: absolute;
+  top: -30%;
+  left: -19%;
+  width: 350px;
+  height: 550px;
+  background: linear-gradient(60deg, transparent, #8777E0, #8777E0);
+  transform-origin: bottom right;
+  animation: clock-animation 10s linear infinite;
+  /* animation-delay: -4s; */
+}
+
+  @keyframes clock-animation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 
   @keyframes pulse-animation {
     0% {
@@ -32,7 +80,5 @@
       box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
     }
   }
-
-
   
 }

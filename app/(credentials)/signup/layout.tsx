@@ -1,3 +1,4 @@
+import Script from "next/script";
 import "./style.css";
 
 export const metadata = {
@@ -31,5 +32,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div>{children}</div>;
+  return <div>{children}
+      <Script src="https://www.googletagmanager.com/gtag/js?id=AW-11457996099" />
+      <Script id="google-analytics">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+ 
+          gtag('config', 'AW-11457996099');
+        `}
+      </Script>
+  </div>;
 }

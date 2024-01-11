@@ -1,4 +1,5 @@
-import sfx_logo from "./images/smartformx.svg";
+// import sfx_logo from "./images/smartformx.svg";
+import sfx_logo from "./images/smartformx_adapt_color.svg";
 import sfx_icon from "./icons/sfx-icon.svg";
 import sfx_full from "./images/smartformx_full.svg";
 import go_beyond from "./images/go_beyond.svg";
