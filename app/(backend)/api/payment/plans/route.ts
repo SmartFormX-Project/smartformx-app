@@ -10,6 +10,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
   const prices = await stripe.prices.list({
     active: true,
+    currency:'brl'
   });
 
   return NextResponse.json({ products: products.data, prices: prices.data }, { status: 200 });

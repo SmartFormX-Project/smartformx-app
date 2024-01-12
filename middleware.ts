@@ -1,8 +1,10 @@
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
+
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
+  const res = NextResponse.next()
 
   const frontendRoutes = {
     home: "/",
@@ -38,7 +40,7 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL(frontendRoutes.home, req.url));
   }
 
-  return NextResponse.next();
+  return res;
 }
 
 export const config = {
