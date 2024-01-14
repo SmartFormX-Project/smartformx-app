@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       ],
       subscription_data: {
         metadata: metadata,
-        trial_period_days: 7,
+        trial_period_days: 14,
         trial_settings: {
           end_behavior: {
             missing_payment_method: "pause",
