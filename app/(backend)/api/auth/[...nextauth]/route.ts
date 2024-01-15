@@ -4,7 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import prisma from "@/config/prisma";
 import { compare } from "bcryptjs";
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, token, trigger }) {
       session.user = token;

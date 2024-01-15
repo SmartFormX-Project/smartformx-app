@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
 import prisma from "@/config/prisma";
-import { authOptions } from "@/app/(backend)/api/auth/[...nextauth]/route";
 import { hash } from "bcryptjs";
 
-export async function GET(req: Request) {
+export async function GET() {
   const users = await prisma.user.findMany();
 
   return NextResponse.json(users);
