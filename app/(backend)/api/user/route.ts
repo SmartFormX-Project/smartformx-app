@@ -5,13 +5,9 @@ import { authOptions } from "@/app/(backend)/api/auth/[...nextauth]/route";
 import { hash } from "bcryptjs";
 
 export async function GET(req: Request) {
-  const session = await getServerSession(authOptions);
+  const users = await prisma.user.findMany();
 
-  if (!session) {
-    return NextResponse.json({ message: "You are not logged in." });
-  }
-
-  return NextResponse.json({ name: session?.user?.name });
+  return NextResponse.json(users);
 }
 
 export async function POST(req: Request) {

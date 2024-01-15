@@ -1,5 +1,6 @@
 import Script from "next/script";
 import "./style.css";
+import dynamic from "next/dynamic";
 
 export const metadata = {
 title: `Cadastrar-se`,
@@ -32,7 +33,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div>{children}
+
+  const CrispWithNoSSR = dynamic(
+    () => import('../../../components/register/crisp')
+  )
+  return <div>
+        <CrispWithNoSSR />
+    {children}
       <Script src="https://www.googletagmanager.com/gtag/js?id=AW-11457996099" />
       <Script id="google-analytics">
         {`

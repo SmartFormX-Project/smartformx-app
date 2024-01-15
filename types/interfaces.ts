@@ -1,5 +1,5 @@
 import { CategoryEnum, StatusEnum } from "./variables";
-interface User {
+export interface User {
   id: string;
   name: string;
   email: string;
