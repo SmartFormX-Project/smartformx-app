@@ -3,7 +3,7 @@ import prisma from "@/config/prisma";
 import { hash } from "bcryptjs";
 
 export async function GET() {
-  const users = await prisma.user.findMany();
+  const users = await prisma.user.findMany({select:{name: true, email: true, subscribeStatus: true}});
 
   return NextResponse.json(users);
 }
