@@ -21,9 +21,10 @@ export async function POST(req: NextRequest) {
       metadata: metadata,
       discounts: [
         {
-          coupon: recurring > 1 ? process.env.STRIPE_COUPON! : "",
+          coupon: recurring > 1 ? process.env.STRIPE_COUPON! : undefined,
         },
       ],
+      allow_promotion_codes: recurring > 1 ? undefined : true,
       subscription_data: {
         metadata: metadata,
         trial_period_days: 14,
