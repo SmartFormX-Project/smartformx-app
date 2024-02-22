@@ -40,7 +40,7 @@ export default function RootLayout({
   return <div>
         <CrispWithNoSSR />
     {children}
-      <Script src="https://www.googletagmanager.com/gtag/js?id=AW-11457996099" />
+      {/* <Script src="https://www.googletagmanager.com/gtag/js?id=AW-11457996099" />
       <Script id="google-analytics">
         {`
           window.dataLayer = window.dataLayer || [];
@@ -49,6 +49,6 @@ export default function RootLayout({
  
           gtag('config', 'AW-11457996099');
         `}
-      </Script>
+      </Script> */}
   </div>;
 }

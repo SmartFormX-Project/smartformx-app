@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { siteConfig } from "@/config/site";
+// import { siteConfig } from "@/config/site";
 
 import "@/styles/globals.css";
 import Providers from "./providers";

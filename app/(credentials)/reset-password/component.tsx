@@ -1,5 +1,4 @@
 "use client";
-import UserService from "@/app/(backend)/services/UserServices";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import { useRouter } from "next/navigation";
@@ -7,6 +6,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiArrowBack } from "react-icons/bi";
 import { MdOutlinePassword, MdOutlineMail } from "react-icons/md";
+import UserService from "@/app/api/repository/UserServices";
 
 export default function ResetPasswordForm() {
   const {

@@ -15,13 +15,13 @@ import { FiPlus } from "react-icons/fi";
 
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
-import SmartFormService from "@/app/(backend)/services/SmartFormService";
 
 import { general3d, experence3d, quality3d, product3d, lupa3d } from "@/assets";
 import Image from "next/image";
+import FormsService from "@/app/api/repository/FormService";
 
 export default function InsightModal() {
-  const { data } = useSession();
+  // const { data } = useSession();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -30,18 +30,14 @@ export default function InsightModal() {
   const updateLoading = () => setLoading((prev) => !prev);
   const onSubmit = async (body: any, onClose: any) => {
     updateLoading();
-    body.businessId = data?.user?.businessId;
-
-    if (!body.businessId) {
-      return console.log("no business id");
-    }
-    const res = await SmartFormService.createForm(body);
-
-    updateLoading();
-    if (res.status == 201) {
-      onClose();
-      reset();
-      window.location.reload();
+  
+    const res = await FormsService.createForm(body);
+console.log("finish")
+updateLoading();
+if (res.status == 201) {
+  onClose();
+  reset();
+  window.location.reload();
     }
   };
   let isMobile = window.matchMedia("(max-width: 600px)").matches;

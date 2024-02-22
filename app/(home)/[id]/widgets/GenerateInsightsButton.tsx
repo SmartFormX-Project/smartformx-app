@@ -1,6 +1,6 @@
 "use client";
 
-import SmartFormService from "@/app/(backend)/services/SmartFormService";
+import AnalyseService from "@/app/api/repository/AnalyseService";
 import { Button } from "@nextui-org/button";
 import { useState } from "react";
 
@@ -11,7 +11,7 @@ export default function GenerateInsightsButton({ id }: { id: string }) {
 
   const generateInsights = async () => {
     updateLoading();
-    const res = await SmartFormService.createAnalyses(id);
+    const res = await AnalyseService.createAnalyses(id);
 
     if (res.status == 201) {
       window.location.reload();

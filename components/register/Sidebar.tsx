@@ -10,9 +10,9 @@ type NavTypes = {
 };
 
 const Sidebar = ({ currentStepIndex, finished }: NavTypes) => {
-  const steps = ["Pessoal info", "Negócio", "Plano", "Resumo"];
+  const steps = ["Pessoal info", "Negócio"];
   return (
-    <header className="h-[150px] bg-black bg-bg-mobile bg-cover bg-center md:h-auto md:rounded-xl md:bg-bg-desktop md:px-8 ">
+    <header className="h-[150px] m-auo bg-black bg-bg-mobile bg-cover bg-center md:h-auto md:rounded-xl md:bg-bg-desktop md:px-8 ">
       <div className="flex md:h-full w-full justify-center space-x-6 pt-10  md:w-[220px] md:flex-col md:justify-start md:space-x-0 md:space-y-8">
         {steps.map((btn, i) => {
           let position;

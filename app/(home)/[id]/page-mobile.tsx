@@ -10,16 +10,18 @@ export default function MobileHomePage({
   formData,
   isAvailableSolution,
   noAnalyseComponent,
+  isBlockedPremiumFeatures
 }: {
   onOpenModalShare: any;
   formData: Form;
   isAvailableSolution: boolean;
+  isBlockedPremiumFeatures: boolean;
   noAnalyseComponent: any;
 }) {
   const hasAnalyse = formData.Analyse != null || formData.Analyse != undefined;
   return (
     <div>
-      <Tabs variant="light" className="mt-4 " color="primary">
+      <Tabs variant="light" className="mt-4 " color="primary" onClick={console.log}>
         <Tab key="f" title="Formulário">
           <FormDescription
             formData={formData}
@@ -49,12 +51,13 @@ export default function MobileHomePage({
               keywords={formData.Analyse?.keywords ?? []}
               summary={formData.Analyse?.summary ?? ""}
               isMobile
+              isBlocked={isBlockedPremiumFeatures}
             />
           </Tab>
         )}
         {hasAnalyse && (
           <Tab key="e" title="Estatisticas">
-            <StatsComponent stats={formData.Analyse?.Stats ?? []} isMobile />
+            <StatsComponent stats={formData.Analyse?.Stats ?? []} isMobile isBlocked={isBlockedPremiumFeatures} />
           </Tab>
         )}
       </Tabs>

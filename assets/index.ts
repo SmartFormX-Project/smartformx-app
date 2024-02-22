@@ -10,10 +10,23 @@ import experence3d from "./icons/experence-3d.svg";
 import product3d from "./icons/product-3d.svg";
 import quality3d from "./icons/quality-3d.svg";
 import general3d from "./icons/general-3d.svg";
+import stars from "./icons/multi-stars.svg";
 import lupa3d from "./icons/lupa-3d.svg";
 import thankyou from "./images/icon-thank-you.svg";
 
+import analyse from "./images/analyse.png";
+import chat from "./images/chat.png";
+import form_feedback from "./images/form-feedback.png";
+import headphone from "./images/headphone.png";
+import inteligence from "./images/inteligence.png";
+
 export {
+  analyse,
+  chat,
+  form_feedback,
+  headphone,
+  inteligence,
+  stars,
   sfx_full,
   sfx_icon,
   sfx_logo,

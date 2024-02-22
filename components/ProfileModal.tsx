@@ -1,7 +1,8 @@
 "use client";
 
-import businessService from "@/app/(backend)/services/BussinessService";
-import PaymentService from "@/app/(backend)/services/PaymentService";
+import businessService from "@/app/api/repository/BussinessService";
+import PaymentService from "@/app/api/repository/PaymentService";
+import { AppFetchJSON } from "@/app/api/repository/fetch";
 import {
   Button,
   Modal,
@@ -10,36 +11,29 @@ import {
   ModalHeader,
 } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
-import { FiCheck } from "react-icons/fi";
 import useSWR from "swr";
-const fetcher = (arg: any, ...args: any) =>
-  fetch(arg, ...args).then((res) => res.json());
+
+
 export default function ProfileModal({
   isOpen,
   onOpenChange,
-  busId,
-  userName,
 }: {
   isOpen: boolean;
-  busId: string;
-  userName: string;
   onOpenChange: () => void;
 }) {
   const session = useSession();
   const { data, isLoading, error } = useSWR(
-    businessService.URL_FETCH_BUSINESS + busId,
-    fetcher
+    businessService.getBusinessURL(),
+    AppFetchJSON
   );
 
   const goToPortal = async () => {
-    const uid = session.data?.user?.id;
-    if (uid) {
+    // const uid = session.data?.user?.id;
+    // if (uid) {
       const { data, status } = await PaymentService.goToStripeCustomerPortal(
-        uid
+        
       );
-      window.location.assign(data);
-    }
-    console.log("user id not provide, problably you arent logged in");
+      if (status == 201) location.assign(data.url);
   };
 
 
@@ -106,7 +100,7 @@ export default function ProfileModal({
                 <div className="flex uppercase items-center justify-center bg-white text-black font-bold text-4xl rounded-2xl border-8 border-[#18181B] px-4  h-[100px]">
                   {data.name.split(" ").map((e: any) => e[0])}
                 </div>
-                <h2 className="text-xl font-bold mt-2">{userName}</h2>
+                <h2 className="text-xl font-bold mt-2">{session.data?.user?.name}</h2>
               </div>
             </ModalHeader>
             <ModalBody>

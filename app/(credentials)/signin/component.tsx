@@ -34,7 +34,8 @@ export default function SignInForm() {
     if (session?.ok) r.push("/");
     else if (session?.error){
       udpateLoading();
-      toast.error(session.error, {
+      const error = JSON.parse(session.error).error;
+      toast.error(error, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -57,6 +58,7 @@ export default function SignInForm() {
     udpateLoadingG();
     if (session?.ok) location.reload();
   };
+
   return (
     <section className="bg-[#121212] py-12 h-screen">
       <div className={"overflow-hidden shadow-md shadow-[#1c1c1c] relative bg-[#1c1c1c] max-w-xl mx-auto md:rounded-tl-[50px] md:rounded-br-[50px] h-full box-anim-clock"}>
@@ -132,16 +134,16 @@ export default function SignInForm() {
       </div>
 
       <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
+        // position="top-right"
+        // autoClose={5000}
+        // hideProgressBar
+        // newestOnTop={false}
+        // closeOnClick
+        // rtl={false}
+        // pauseOnFocusLoss
+        // draggable
+        // pauseOnHover
+        // theme="dark"
       />
     </section>
   );

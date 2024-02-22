@@ -1,9 +1,9 @@
 "use client";
 
-import SmartFormService from "@/app/(backend)/services/SmartFormService";
+import AnalyseService from "@/app/api/repository/AnalyseService";
 import { TopicAnalyses } from "@/types/interfaces";
 import { Tooltip, Button } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { BsLightbulb } from "react-icons/bs";
 import { FiThumbsUp, FiThumbsDown } from "react-icons/fi";
 
@@ -30,7 +30,7 @@ export default function InsightsDetails({
 
   const generateSolution = async (id: string) => {
     updateLoading();
-    var res = await SmartFormService.createSolution(id);
+    var res = await AnalyseService.createSolution(id);
     if (res.status === 201) window.location.reload();
     else updateLoading();
   };
