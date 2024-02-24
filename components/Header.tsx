@@ -29,8 +29,9 @@ const Header = ({ freeBanner = false }: { freeBanner?: boolean }) => {
   const VerifyTokenExpired = useCallback(async () => {
     if (data) {
       const now = new Date().getTime();
-      const expire = new Date(data.expires).getTime();
-      const isExpired =now>=expire;
+      const expire = new Date(data.expires).getTime()+600000;
+      const isExpired = now >= expire;
+
       if (isExpired) {
         await signOut();
         location.reload();
