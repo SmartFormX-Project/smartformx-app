@@ -1,6 +1,5 @@
 "use client";
-import { Input } from "@nextui-org/input";
-import { Button } from "@nextui-org/button";
+import { Input, Button } from "@nextui-org/react";
 import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -35,7 +34,7 @@ export default function ResetPasswordForm() {
   const udpateLoading = () => setLoading((prev) => !prev);
 
   const token = searchParams.get("wtk")!;
-  const uid = searchParams.get("ud")!;
+  const uid = searchParams.get("uid")!;
 
   const { data, isLoading, error } = useSWR(
     AuthenticationService.GetCheckResetPasswordTokenURL(uid, token),
@@ -73,7 +72,7 @@ export default function ResetPasswordForm() {
     );
   if (data && data.valid)
     return (
-      <section className="bg-black">
+      <section className="bg-[#121212]">
         {success ? (
           <div className="w-full h-screen flex flex-col justify-center items-center text-green-500">
             <TbLockCheck size={200} />
@@ -89,7 +88,7 @@ export default function ResetPasswordForm() {
             <br />
 
             <div className="pt-32 pb-12 md:pt-40 md:pb-20 ">
-              <div className="max-w-sm mx-auto border border-white/20 rounded-xl p-8">
+              <div className="max-w-sm mx-auto border border-white/20 bg-[#1c1c1c] rounded-xl p-8">
                 <div className="max-w-4xl mx-auto text-center pb-6 md:pb-8">
                   <Image
                     src={sfx_logo}

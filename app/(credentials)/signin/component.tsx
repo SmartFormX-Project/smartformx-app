@@ -4,7 +4,6 @@ import "react-toastify/dist/ReactToastify.min.css";
 
 import { sfx_logo } from "@/assets";
 import { Button,Input } from "@nextui-org/react";
-// import {  } from "@nextui-org/input";
 
 import { signIn } from "next-auth/react";
 import Image from "next/image";
