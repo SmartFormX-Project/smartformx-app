@@ -12,7 +12,8 @@ import useSWR from "swr";
 
 import { sfx_logo } from "@/assets";
 import { useRouter, useSearchParams } from "next/navigation";
-import UserService from "@/app/api/repository/UserServices";
+
+import AuthenticationService from "@/app/api/repository/AuthenticationService";
 
 const fetcher = (arg: any, ...args: any) =>
   fetch(arg, ...args).then((res) => res.json());
@@ -37,7 +38,7 @@ export default function ResetPasswordForm() {
   const uid = searchParams.get("ud")!;
 
   const { data, isLoading, error } = useSWR(
-    UserService.getCheckTokenURL(uid, token),
+    AuthenticationService.GetCheckResetPasswordTokenURL(uid, token),
     fetcher
   );
 
@@ -45,7 +46,7 @@ export default function ResetPasswordForm() {
     const { pass } = data;
 
     udpateLoading();
-    await UserService.updatePassword(pass, uid);
+    await AuthenticationService.ResetPassword(pass, uid);
     udpateLoading();
 
     setSuccess((prev) => !prev);

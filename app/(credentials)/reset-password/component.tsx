@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiArrowBack } from "react-icons/bi";
 import { MdOutlinePassword, MdOutlineMail } from "react-icons/md";
-import UserService from "@/app/api/repository/UserServices";
+import AuthenticationService from "@/app/api/repository/AuthenticationService";
 
 export default function ResetPasswordForm() {
   const {
@@ -26,7 +26,7 @@ export default function ResetPasswordForm() {
     const { email } = data;
 
     if (email) {
-      await UserService.sendResetPassword(email);
+      await AuthenticationService.SendForgotPasswordEmail(email);
       setSent((prev) => !prev);
     }
     udpateLoading();
