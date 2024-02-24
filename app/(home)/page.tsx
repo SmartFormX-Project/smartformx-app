@@ -69,7 +69,7 @@ export default function HomePage() {
   }, [onOpen, session]);
 
   return (
-    <div className="w-full h-full flex flex-col justify-between overflow-x-hidden z-0 pt-6">
+    <div className="w-full h-full flex flex-col justify-around overflow-x-hidden z-0 pt-6">
       {/* {session.status != "loading" && (
       
       )} */}
