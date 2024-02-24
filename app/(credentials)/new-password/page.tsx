@@ -84,7 +84,7 @@ export default function ResetPasswordForm() {
             </div>
           </div>
         ) : (
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 h-screen">
             <br />
 
             <div className="pt-32 pb-12 md:pt-40 md:pb-20 ">
@@ -101,14 +101,15 @@ export default function ResetPasswordForm() {
                   </h1>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
+                {/* <form> */}
                   <span className="text-sm text-foreground-400">
                     *A senha deve ter no minimo 8 caraacteres
                   </span>
-                  <div className="flex flex-wrap -mx-3 mb-4 mt-4">
-                    <div className="w-full px-3 space-y-4">
+                  <div className="flex flex-wrap mb-4 mt-4">
                       <Input
                         radius="sm"
                         type="password"
+                        className="mb-4"
                         label="Nova senha"
                         placeholder="***********"
                         size="lg"
@@ -141,10 +142,8 @@ export default function ResetPasswordForm() {
                         }
                         isRequired
                       />
-                    </div>
                   </div>
-                  <div className="flex flex-wrap -mx-3 mt-6">
-                    <div className="w-full pt-6">
+                  <div className="flex flex-wrap mt-8">
                       <Button
                         fullWidth
                         size="lg"
@@ -156,13 +155,12 @@ export default function ResetPasswordForm() {
                       >
                         Salvar
                       </Button>
-                    </div>
                   </div>
                 </form>
               </div>
             </div>
           </div>
-        )}
+         )}
       </section>
     );
 }
