@@ -1,9 +1,8 @@
 "use client";
-import UserService from "@/app/(backend)/services/UserServices";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdLock } from "react-icons/md";
 import { TbLockCheck } from "react-icons/tb";
@@ -13,6 +12,7 @@ import useSWR from "swr";
 
 import { sfx_logo } from "@/assets";
 import { useRouter, useSearchParams } from "next/navigation";
+import UserService from "@/app/api/repository/UserServices";
 
 const fetcher = (arg: any, ...args: any) =>
   fetch(arg, ...args).then((res) => res.json());
@@ -37,11 +37,7 @@ export default function ResetPasswordForm() {
   const uid = searchParams.get("ud")!;
 
   const { data, isLoading, error } = useSWR(
-    UserService.URL_BASE +
-      "api/user/reset-password/check?wtk=" +
-      token +
-      "&ud=" +
-      uid,
+    UserService.getCheckTokenURL(uid, token),
     fetcher
   );
 

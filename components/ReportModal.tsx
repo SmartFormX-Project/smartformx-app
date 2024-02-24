@@ -1,4 +1,4 @@
-import UserService from "@/app/(backend)/services/UserServices";
+import UserService from "@/app/api/repository/UserServices";
 import { Button } from "@nextui-org/button";
 import {
   Input,
@@ -16,12 +16,10 @@ import { useForm } from "react-hook-form";
 const ReportModal = ({
   onSubmit,
   isOpen,
-  userId,
   onOpenChange,
 }: {
   onSubmit: (onClose: any) => void;
   isOpen: boolean;
-  userId: string;
   onOpenChange: () => void;
 }) => {
   const { register, handleSubmit } = useForm();
@@ -35,7 +33,7 @@ const ReportModal = ({
   const onFormSubmit = (data: any, onClose: any) => {
     const { title, category, description } = data;
 
-    UserService.sendReport({ title, category, description, userId }).then(
+    UserService.sendReport({ title, category, description }).then(
       (res: any) => {
         if (res.status == 201) onSubmit(onClose);
       }

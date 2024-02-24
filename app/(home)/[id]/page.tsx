@@ -15,7 +15,6 @@ import Link from "next/link";
 import { Form, TopicAnalyses } from "@/types/interfaces";
 import { getStatusString } from "@/types/variables";
 import FormDescription from "./widgets/FormInfo";
-import SmartFormService from "@/app/(backend)/services/SmartFormService";
 import GenerateInsightsButton from "./widgets/GenerateInsightsButton";
 import useSWR from "swr";
 import ShareFormModal from "@/components/ShareFormModal";
@@ -27,19 +26,19 @@ import MobileHomePage from "./page-mobile";
 import InsightsDetails from "./widgets/InsightDetails";
 import AnalyseAndKeyWords from "./widgets/AnalyseAndKeywords";
 import StatsComponent from "./widgets/Stats";
-
-const fetcher = (arg: any, ...args: any) =>
-  fetch(arg, ...args).then((res) => res.json());
+import { AppFetchJSON } from "@/app/api/repository/fetch";
+import FormsService from "@/app/api/repository/FormService";
+import AnalyseService from "@/app/api/repository/AnalyseService";
+import ConfirmActionModal from "@/components/system/ConfirmModal";
 
 export default function InsightPage({
   params: { id },
 }: {
   params: { id: string };
 }) {
-  const url = SmartFormService.URL_GET_FORM_SERVER + id;
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { data, isLoading, error } = useSWR(url, fetcher);
+  const { data, isLoading, error } = useSWR(FormsService.FetchSingleFormURL(id), AppFetchJSON);
 
   const form = data as Form;
   const session = useSession();
@@ -50,7 +49,7 @@ export default function InsightPage({
     const abortC = new AbortController();
 
     const status = async () => {
-      var res = await SmartFormService.checkAnalyseStatus(id, form.status);
+      var res = await AnalyseService.checkAnalyseStatus(id, form.status);
       var newStatus = res.data.new_status as boolean;
       if (newStatus) location.reload();
     };
@@ -87,7 +86,7 @@ export default function InsightPage({
           </h1>
         );
         break;
-      case "form_done":
+      case "closed":
         component = <GenerateInsightsButton id={form.id ?? ""} />;
         break;
       case "analysing":
@@ -100,11 +99,6 @@ export default function InsightPage({
   let isMobile = window.matchMedia("(max-width: 600px)").matches;
   return (
     <div className="flex flex-col w-full h-full overflow-y-hidden">
-      <Header
-        busId={session.data?.user?.businessId ?? ""}
-        name={session.data?.user?.name ?? ""}
-        userId={session.data?.user?.id ?? ""}
-      />
       <div className="flex items-center mt-4  cursor-default">
         <Link href={"/"}>
           <Button
@@ -113,7 +107,7 @@ export default function InsightPage({
             className="border-[#9999]"
             color="default"
             radius="md"
-            startContent={<FiArrowLeft color="#9999" size={20}/>}
+            startContent={<FiArrowLeft color="#9999" size={20} />}
             isIconOnly
           />
         </Link>
@@ -135,6 +129,7 @@ export default function InsightPage({
 
       {isMobile ? (
         <MobileHomePage
+          isBlockedPremiumFeatures={session.data?.user?.plan?.toLocaleLowerCase() === "free"}
           formData={form}
           onOpenModalShare={onOpen}
           isAvailableSolution={session.data?.user?.plan === "premium"}
@@ -157,13 +152,15 @@ export default function InsightPage({
                   <InsightsDetails
                     insights={form.Analyse.Topics}
                     isAvailableSolution={session.data?.user?.plan === "premium"}
+
                   />
                   <AnalyseAndKeyWords
                     keywords={form.Analyse.keywords}
                     summary={form.Analyse.summary}
+                    isBlocked={session.data?.user?.plan?.toLocaleLowerCase() === "free"}
                   />
                 </div>
-                <StatsComponent stats={form.Analyse.Stats ?? []} />
+                <StatsComponent stats={form.Analyse.Stats ?? []} isBlocked={session.data?.user?.plan?.toLocaleLowerCase() === "free"} />
                 {/* <div className="flex h-1/4 gap-4">
                   {form.Analyse.Stats.map((e, i) => {
                     return (
@@ -202,6 +199,7 @@ export default function InsightPage({
         onOpenChange={onOpenChange}
         onSubmit={(close) => close()}
       />
+      
     </div>
   );
 }

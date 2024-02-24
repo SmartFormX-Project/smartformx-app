@@ -5,7 +5,6 @@ import Link from "next/link";
 import InsightModal from "./widgets/CreateFormModal";
 
 import { Button } from "@nextui-org/button";
-import AnalyseService from "../(backend)/services/SmartFormService";
 import { Form } from "@/types/interfaces";
 import { formatDistance } from "date-fns";
 import { getStatusString } from "@/types/variables";
@@ -14,22 +13,22 @@ import Image from "next/image";
 import { rocket3d } from "@/assets";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
-import UserService from "../(backend)/services/UserServices";
 import { useEffect, useState } from "react";
 import ModalPaymentIssue from "@/components/ModalPaymentIssue";
 import { useDisclosure } from "@nextui-org/react";
-
-const fetcher = (arg: any, ...args: any) =>
-  fetch(arg, ...args).then((res) => res.json());
+import FormsService from "../api/repository/FormService";
+import UserService from "../api/repository/UserServices";
+import {  AppFetchJSON } from "../api/repository/fetch";
 
 export default function HomePage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  
   const [isMobile, setMobileMode] = useState<boolean>(false);
   var session = useSession();
 
   const { data, isLoading, error } = useSWR(
-    AnalyseService.URL_GET_FORMS + session.data?.user?.businessId,
-    fetcher,
+    FormsService.FetchAllFormsURL(),
+    AppFetchJSON,
     { shouldRetryOnError: false }
   );
 
@@ -52,7 +51,7 @@ export default function HomePage() {
     (async function () {
       if (session.status == "authenticated" && query.get("up")) {
         if (query.get("up")) {
-          const { data } = await UserService.getUserById(user?.id!);
+          const { data } = await UserService.getUserById();
 
           if (data) {
             const { name } = data.metadata;
@@ -67,17 +66,13 @@ export default function HomePage() {
         }
       }
     })();
-  }, [session]);
+  }, [onOpen, session]);
 
   return (
-    <div className="w-full h-full flex flex-col justify-between overflow-x-hidden z-0">
-      {session.status != "loading" && (
-        <Header
-          busId={session.data?.user?.businessId ?? ""}
-          name={session.data?.user?.name ?? ""}
-          userId={session.data?.user?.id ?? ""}
-        />
-      )}
+    <div className="w-full h-full flex flex-col justify-between overflow-x-hidden z-0 pt-6">
+      {/* {session.status != "loading" && (
+      
+      )} */}
 
       <FormListComponent loading={isLoading} data={data} />
       {session.status != "loading" && <InsightModal />}
@@ -129,6 +124,8 @@ const FormListComponent = ({
       <h1 className="font-bold text-6xl text-black text-center mt-4">
         Crie seu primeiro smartform
       </h1>
+
+      
     </div>
   );
 };

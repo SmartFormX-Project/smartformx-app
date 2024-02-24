@@ -10,7 +10,7 @@ import {
   Button,
   UseDisclosureProps,
 } from "@nextui-org/react";
-import PaymentService from "@/app/(backend)/services/PaymentService";
+import PaymentService from "@/app/api/repository/PaymentService";
 import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
 

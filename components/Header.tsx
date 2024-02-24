@@ -15,28 +15,64 @@ import { FiUser } from "react-icons/fi";
 import ProfileModal from "./ProfileModal";
 import ReportModal from "./ReportModal";
 import Image from "next/image";
-import { sfx_icon, sfx_full_light } from "@/assets";
+import { sfx_icon, sfx_full_light, stars } from "@/assets";
+import UpdatePlanModal from "./UpdatePlanModal";
+import { useCallback, useEffect, useState } from "react";
 
-const Header = ({
-  name,
-  busId,
-  userId,
-}: {
-  name: string;
-  userId: string;
-  busId: string;
-}) => {
+const Header = ({ freeBanner = false }: { freeBanner?: boolean }) => {
+  var { data, status } = useSession();
   const modalProfile = useDisclosure();
   const modalReport = useDisclosure();
-  let isMobile = window.matchMedia("(max-width: 600px)").matches;
-  
-  const chatwootBtn = document.querySelector(`.woot-widget-bubble`);
-  return (
+  const UpdatePlanDisclosure = useDisclosure();
+  const [isMobile, setMobileMode] = useState<boolean>(false);
+
+  const VerifyTokenExpired = useCallback(async () => {
+    if (data) {
+      const now = new Date().getTime();
+      const expire = new Date(data.expires).getTime();
+      const isExpired =now>=expire;
+      if (isExpired) {
+        await signOut();
+        location.reload();
+      }
+    }
+    return true;
+  }, [data]);
+
+  useEffect(() => {
+    if (window) {
+      setMobileMode(window.matchMedia("(max-width: 600px)").matches);
+    }
+
+    VerifyTokenExpired();
+  }, [VerifyTokenExpired]);
+
+  // const chatwootBtn = document.querySelector(`.woot-widget-bubble`);
+  return status != "loading" ? (
     <header className="block text-center w-full">
       <div className="flex justify-between items-center">
+        <Image
+          src={isMobile ? sfx_icon : sfx_full_light}
+          alt="SmartFormX"
+          className={isMobile ? "w-1/12" : "w-1/6"}
+        />
+        {freeBanner && !isMobile && (
+          <div
+            onClick={UpdatePlanDisclosure.onOpen}
+            className="flex flex-col justify-between cursor-pointer p-[1.5px] transition-all bg-gradient-to-r hover:from-[#21D6CC] hover:to-[#7D21CF] rounded-lg"
+          >
+            <div className="flex flex-col bg-white justify-between h-full w-full px-2 py-[2px] rounded-md">
+              <div className="flex items-center justify-between space-x-2">
+                <Image src={stars} alt="" width={20} height={20} />
+                <span className="font-light text-start text-[11px] text-black md:w-[250px]">
+                  Descubra novos recursos, e impulsione seu negócio.{" "}
+                  <b>Assine agora!</b>
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
 
-
-        <Image src={isMobile? sfx_icon: sfx_full_light} alt="SmartFormX" className={isMobile?"w-1/12" :"w-1/6"}/>
         <Dropdown>
           <DropdownTrigger>
             <Chip
@@ -59,7 +95,7 @@ const Header = ({
                 />
               }
             >
-              {name}
+              {data?.user?.name}
             </Chip>
           </DropdownTrigger>
           <DropdownMenu
@@ -89,16 +125,35 @@ const Header = ({
       <ProfileModal
         isOpen={modalProfile.isOpen}
         onOpenChange={modalProfile.onOpenChange}
-        busId={busId}
-        userName={name}
       />
       <ReportModal
         isOpen={modalReport.isOpen}
         onOpenChange={modalReport.onOpenChange}
         onSubmit={(close) => close()}
-        userId={userId}
       />
+      <UpdatePlanModal
+        isOpen={UpdatePlanDisclosure.isOpen}
+        onOpenChange={UpdatePlanDisclosure.onOpenChange}
+      />
+      {freeBanner && isMobile && (
+        <div
+          onClick={UpdatePlanDisclosure.onOpen}
+          className="flex mt-2 flex-col max-w-[350px] m-auto justify-between cursor-pointer p-[1.5px] transition-all bg-gradient-to-r hover:from-[#21D6CC] hover:to-[#7D21CF] rounded-lg"
+        >
+          <div className="flex flex-col bg-white justify-between h-full w-full px-2 py-[2px] rounded-md">
+            <div className="flex items-center justify-between space-x-2">
+              <Image src={stars} alt="" width={20} height={20} />
+              <span className="font-light text-start text-[11px] text-black md:w-[250px]">
+                Descubra novos recursos, e impulsione seu negócio.{" "}
+                <b>Assine agora!</b>
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
+  ) : (
+    <span></span>
   );
 };
 

@@ -44,10 +44,6 @@ jobs:
       run: |
         npm i -g pnpm
         pnpm i --fix-lockfile
-    - name: Load prisma
-      run: |
-        npx prisma generate
-        npx prisma migrate deploy
     - name: Load env
       run: |
         touch .env.local

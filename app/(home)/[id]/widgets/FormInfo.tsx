@@ -7,12 +7,14 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  useDisclosure,
 } from "@nextui-org/react";
 import { BiSolidQuoteAltLeft } from "react-icons/bi";
 import { FiChevronDown, FiEye, FiShare, FiShare2 } from "react-icons/fi";
 import { HiLockClosed } from "react-icons/hi";
 import Carousel from "./QuestionSlide";
-import SmartFormService from "@/app/(backend)/services/SmartFormService";
+import FormsService from "@/app/api/repository/FormService";
+import ConfirmActionModal from "@/components/system/ConfirmModal";
 
 export default function FormDescription({
   formData,
@@ -24,12 +26,14 @@ export default function FormDescription({
   isMobile?: boolean
 }) {
 
+  const {isOpen,  onOpen, onOpenChange} = useDisclosure();
+
   var convertion: number =
     formData._count.UserAnswers / (formData.entrances ?? 1);
 
   const closeForm = async () => {
-    const response = await SmartFormService.updateFormStatus(
-      formData.id ?? "",
+    const response = await FormsService.updateFormStatus(
+      formData.id,
       "form_done"
     );
 
@@ -63,7 +67,7 @@ export default function FormDescription({
             <DropdownMenu
               aria-label="Static Actions"
               onAction={(key) =>
-                key == "close_form" ? closeForm() : onOpenModalShare()
+                key == "close_form" ? onOpen() : onOpenModalShare()
               }
             >
               <DropdownItem key="see_form" startContent={<FiShare2 />}>
@@ -117,6 +121,12 @@ export default function FormDescription({
         size={150}
         className="text-white/[10%] absolute bottom-0"
       />
+       <ConfirmActionModal 
+       isOpen={isOpen}
+       onOpenChange={onOpenChange}
+       onSubmit={async(close)=>{close(); await closeForm();}}
+       />
+     
     </div>;
 
     return DesktopMode;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import useVariants from "./hooks/useVariants";
 import { FieldValues, UseFormRegister } from "react-hook-form";
@@ -14,7 +14,7 @@ import {
   cn,
   useRadio,
 } from "@nextui-org/react";
-import PaymentService from "@/app/(backend)/services/PaymentService";
+import PaymentService from "@/app/api/repository/PaymentService";
 import useSWR from "swr";
 import { FiCheck } from "react-icons/fi";
 
@@ -27,6 +27,7 @@ type updateWithBilling = {
 
 const fetcher = (arg: any, ...args: any) =>
   fetch(arg, ...args).then((res) => res.json());
+  
 const BillingPlan = ({
   status,
   register,
@@ -36,7 +37,7 @@ const BillingPlan = ({
   const { variants } = useVariants({ status });
 
   const [recurring, setRecurring] = useState("semester");
-  const { data, isLoading } = useSWR(PaymentService.URL_BASE_PLANS, fetcher);
+  const { data, isLoading } = useSWR(PaymentService.GetPlansURL(), fetcher);
 
   if (data) {
     const { discount } = data.products[1].metadata;
