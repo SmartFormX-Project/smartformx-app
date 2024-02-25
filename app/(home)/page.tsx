@@ -170,7 +170,7 @@ const CardForm = ({ e, i }: any) => {
               })}
             </time>
           </div>
-          <Link href={"/" + e.id}>
+          <Link href={`/${e.id}`}>
             <Button type="button" size="sm" color="default" radius="full">
               Abrir
             </Button>
