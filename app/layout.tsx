@@ -69,7 +69,7 @@ export default function RootLayout({
         />
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
-        <Script src={"https://www.googletagmanager.com/gtag/js?id="+process.env.NEXT_PUBLIC_GTM_ID} />
+        {/* <Script src={"https://www.googletagmanager.com/gtag/js?id="+process.env.NEXT_PUBLIC_GTM_ID} />
       <Script id="google-analytics">
         {`
          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -78,7 +78,7 @@ export default function RootLayout({
          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
          })(window,document,'script','dataLayer','${process.env.NEXT_PUBLIC_GTM_ID}');
         `}
-      </Script>
+      </Script> */}
       
         </head>
       <body
