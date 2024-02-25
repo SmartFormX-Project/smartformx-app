@@ -12,7 +12,7 @@ export default async function HomeLayout({
   return (
     <section className="flex flex-col bg-gradient-to-br from-indigo-50 via-white to-cyan-100 justify-center w-full h-screen  p-4">
         <Header
-          freeBanner
+          freeBanner={user?.plan?.toLocaleLowerCase()=="free"}
         />
       {children}
       <ChatwootWidget

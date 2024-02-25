@@ -24,14 +24,14 @@ class FormsServiceClass {
         return this.URL_BASE+ "/client/"+shortId
     };
 
-    async createForm(body: any): Promise<{ data: any; status: any }> {
+    async createForm(body: any) {
     
       var response = await AppFetch(this.URL_BASE + "/", {
         method: "POST",
         body: JSON.stringify(body),
       });
-      const data = await response.json();
-      return { data: data, status: response.status };
+      // const data = await response.json();
+      return response;
     }
   
     // async getForms(businessId: string): Promise<{ data: any; status: any }> {

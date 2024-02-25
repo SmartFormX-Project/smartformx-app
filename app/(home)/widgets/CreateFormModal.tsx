@@ -9,7 +9,10 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Select, SelectItem , Input, Textarea
+  Select,
+  SelectItem,
+  Input,
+  Textarea,
 } from "@nextui-org/react";
 import { FiPlus } from "react-icons/fi";
 
@@ -19,8 +22,15 @@ import { useSession } from "next-auth/react";
 import { general3d, experence3d, quality3d, product3d, lupa3d } from "@/assets";
 import Image from "next/image";
 import FormsService from "@/app/api/repository/FormService";
+import { toast } from "react-toastify";
 
-export default function InsightModal() {
+export default function InsightModal({
+  isRedirectSubmit = false,
+  redirectSubmit = () => {},
+}: {
+  isRedirectSubmit?: boolean;
+  redirectSubmit?: () => void;
+}) {
   // const { data } = useSession();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -30,14 +40,31 @@ export default function InsightModal() {
   const updateLoading = () => setLoading((prev) => !prev);
   const onSubmit = async (body: any, onClose: any) => {
     updateLoading();
-  
-    const res = await FormsService.createForm(body);
-console.log("finish")
-updateLoading();
-if (res.status == 201) {
-  onClose();
-  reset();
-  window.location.reload();
+
+    try {
+      const res = await FormsService.createForm(body);
+
+      updateLoading();
+      if (res.status == 201) {
+        onClose();
+        reset();
+        window.location.reload();
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error(
+        "Não foi possivel criar o formulário, tente novamente mais tarde.",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        }
+      );
     }
   };
   let isMobile = window.matchMedia("(max-width: 600px)").matches;
@@ -50,7 +77,7 @@ if (res.status == 201) {
         className="mb-10 self-center animate-fade-up "
         style={{ animationDelay: "0.15s", animationFillMode: "forwards" }}
         startContent={<FiPlus />}
-        onClick={onOpen}
+        onClick={() => (isRedirectSubmit ? redirectSubmit() : onOpen())}
       >
         Novo formulário
       </Button>
@@ -87,7 +114,9 @@ if (res.status == 201) {
 
                 <CustomSelect register={register} readOnly={loading} />
               </ModalBody>
-              <ModalFooter className={isMobile?"justify-start":"justify-end"}>
+              <ModalFooter
+                className={isMobile ? "justify-start" : "justify-end"}
+              >
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cancelar
                 </Button>

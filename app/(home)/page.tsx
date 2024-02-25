@@ -17,9 +17,11 @@ import { useDisclosure } from "@nextui-org/react";
 import FormsService from "../api/repository/FormService";
 import UserService from "../api/repository/UserServices";
 import {  AppFetchJSON } from "../api/repository/fetch";
+import UpdatePlanModal from "@/components/UpdatePlanModal";
 
 export default function HomePage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const UpdatePlanDisclosure = useDisclosure();
   
   const [isMobile, setMobileMode] = useState<boolean>(false);
   var session = useSession();
@@ -68,18 +70,20 @@ export default function HomePage() {
 
   return (
     <div className="w-full h-full flex flex-col justify-around overflow-x-hidden z-0 pt-6">
-      {/* {session.status != "loading" && (
-      
-      )} */}
-
+     
       <FormListComponent loading={isLoading} data={data} />
-      {session.status != "loading" && <InsightModal />}
+      {session.status != "loading" && <InsightModal isRedirectSubmit={data.length > 0} redirectSubmit={UpdatePlanDisclosure.onOpen}/>}
 
       {isMobile && <div></div>}
       <ModalPaymentIssue
         isOpen={isOpen}
         onChange={onOpenChange}
         onOpen={onOpen}
+      />
+      <UpdatePlanModal
+      hitLimit
+        isOpen={UpdatePlanDisclosure.isOpen}
+        onOpenChange={UpdatePlanDisclosure.onOpenChange}
       />
     </div>
   );

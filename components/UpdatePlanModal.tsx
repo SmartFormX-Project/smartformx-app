@@ -18,8 +18,10 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 const UpdatePlanModal = ({
   isOpen,
   onOpenChange,
+  hitLimit = false
 }: {
   isOpen: boolean;
+  hitLimit?:boolean;
   onOpenChange: () => void;
 }) => {
   const [current, setCurrent] = useState(0);
@@ -37,8 +39,7 @@ const UpdatePlanModal = ({
   const goToPortal = async () => {
     setLoad(prev=>!prev);
     const { data, status } = await PaymentService.goToStripeCustomerPortal();
- console.log(data);
- console.log(status);
+
     if (status == 201) location.assign(data.url);
     setLoad(prev=>!prev);
   };
@@ -88,7 +89,8 @@ const UpdatePlanModal = ({
           <>
             <ModalHeader>
               <h2 className="font-bold text-xl text-center">
-                Aproveite um universo de possibilidades
+                
+                {hitLimit ? "Ops! Limite alcançado! Hora de dar um upgrade no plano... ; )": "Aproveite um universo de possibilidades"}
               </h2>
             </ModalHeader>
             <ModalBody>
