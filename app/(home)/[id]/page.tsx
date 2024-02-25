@@ -1,27 +1,20 @@
-// import "server-only";
+
 "use client";
-import Header from "@/components/Header";
 import { Button } from "@nextui-org/button";
 import {
   FiArrowLeft,
-  FiThumbsDown,
-  FiThumbsUp,
-  FiKey,
-  FiInfo,
 } from "react-icons/fi";
-import { TbChartDots3 } from "react-icons/tb";
-import { BsLightbulb } from "react-icons/bs";
 import Link from "next/link";
-import { Form, TopicAnalyses } from "@/types/interfaces";
+import { Form } from "@/types/interfaces";
 import { getStatusString } from "@/types/variables";
 import FormDescription from "./widgets/FormInfo";
 import GenerateInsightsButton from "./widgets/GenerateInsightsButton";
 import useSWR from "swr";
 import ShareFormModal from "@/components/ShareFormModal";
-import { Tooltip, useDisclosure } from "@nextui-org/react";
+import { useDisclosure } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import LoaderComponent from "@/components/loaderAnalysing";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import MobileHomePage from "./page-mobile";
 import InsightsDetails from "./widgets/InsightDetails";
 import AnalyseAndKeyWords from "./widgets/AnalyseAndKeywords";
@@ -29,14 +22,17 @@ import StatsComponent from "./widgets/Stats";
 import { AppFetchJSON } from "@/app/api/repository/fetch";
 import FormsService from "@/app/api/repository/FormService";
 import AnalyseService from "@/app/api/repository/AnalyseService";
-import ConfirmActionModal from "@/components/system/ConfirmModal";
 
-export default function InsightPage({
+export default function InsightPage(
+  {
   params: { id },
 }: {
   params: { id: string };
-}) {
+}
+) {
 
+  if(!id) location.replace("/");
+  
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { data, isLoading, error } = useSWR(FormsService.FetchSingleFormURL(id), AppFetchJSON);
 

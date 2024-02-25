@@ -19,7 +19,7 @@ import { sfx_icon, sfx_full_light, stars } from "@/assets";
 import UpdatePlanModal from "./UpdatePlanModal";
 import { useCallback, useEffect, useState } from "react";
 
-const Header = ({ freeBanner = false }: { freeBanner?: boolean }) => {
+const Header = () => {
   var { data, status } = useSession();
   const modalProfile = useDisclosure();
   const modalReport = useDisclosure();
@@ -57,7 +57,7 @@ const Header = ({ freeBanner = false }: { freeBanner?: boolean }) => {
           alt="SmartFormX"
           className={isMobile ? "w-1/12" : "w-1/6"}
         />
-        {freeBanner && !isMobile && (
+        {data?.user?.plan?.toLocaleLowerCase()==="free" && !isMobile && (
           <div
             onClick={UpdatePlanDisclosure.onOpen}
             className="flex flex-col justify-between cursor-pointer p-[1.5px] transition-all bg-gradient-to-r hover:from-[#21D6CC] hover:to-[#7D21CF] rounded-lg"
@@ -136,7 +136,7 @@ const Header = ({ freeBanner = false }: { freeBanner?: boolean }) => {
         isOpen={UpdatePlanDisclosure.isOpen}
         onOpenChange={UpdatePlanDisclosure.onOpenChange}
       />
-      {freeBanner && isMobile && (
+      {data?.user?.plan?.toLocaleLowerCase()==="free" && isMobile && (
         <div
           onClick={UpdatePlanDisclosure.onOpen}
           className="flex mt-2 flex-col max-w-[350px] m-auto justify-between cursor-pointer p-[1.5px] transition-all bg-gradient-to-r hover:from-[#21D6CC] hover:to-[#7D21CF] rounded-lg"
