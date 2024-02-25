@@ -72,7 +72,7 @@ export default function HomePage() {
     <div className="w-full h-full flex flex-col justify-around overflow-x-hidden z-0 pt-6">
      
       <FormListComponent loading={isLoading} data={data} />
-      {session.status != "loading" && <InsightModal isRedirectSubmit={data.length > 0} redirectSubmit={UpdatePlanDisclosure.onOpen}/>}
+      {session.status != "loading" && <InsightModal isRedirectSubmit={data ? data.length > 0: false} redirectSubmit={UpdatePlanDisclosure.onOpen}/>}
 
       {isMobile && <div></div>}
       <ModalPaymentIssue
