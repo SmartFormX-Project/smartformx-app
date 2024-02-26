@@ -54,11 +54,11 @@ export default function HomePage() {
           const { data } = await UserService.getUserById();
 
           if (data) {
-            const { name } = data.metadata;
+            const { name } = data.user.metadata;
 
             await session.update({
               plan: name,
-              subscribeStatus: data.subscribeStatus,
+              subscribeStatus: data.user.subscribeStatus,
             });
 
             location.replace("/");

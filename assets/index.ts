@@ -19,9 +19,11 @@ import chat from "./images/chat.png";
 import form_feedback from "./images/form-feedback.png";
 import headphone from "./images/headphone.png";
 import inteligence from "./images/inteligence.png";
+import minimalist_logo from "./icons/logo_minimalist.svg";
 
 export {
   analyse,
+  minimalist_logo,
   chat,
   form_feedback,
   headphone,

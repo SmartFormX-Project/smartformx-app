@@ -4,7 +4,7 @@ class UserServiceClass {
   private URL_BASE: string;
 
   constructor() {
-    this.URL_BASE = (process.env.NEXT_PUBLIC_BACKEND_URL as string) + "/user";
+    this.URL_BASE = "/user";
   }
   async getUserById(): Promise<any> {
     var response = await AppFetch(this.URL_BASE, {

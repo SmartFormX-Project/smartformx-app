@@ -15,7 +15,7 @@ import { FiUser } from "react-icons/fi";
 import ProfileModal from "./ProfileModal";
 import ReportModal from "./ReportModal";
 import Image from "next/image";
-import { sfx_icon, sfx_full_light, stars } from "@/assets";
+import { sfx_icon, sfx_full_light, stars, minimalist_logo } from "@/assets";
 import UpdatePlanModal from "./UpdatePlanModal";
 import { useCallback, useEffect, useState } from "react";
 
@@ -31,7 +31,7 @@ const Header = () => {
       const now = new Date().getTime();
       const expire = new Date(data.expires).getTime()+600000;
       const isExpired = now >= expire;
-
+console.log(new Date(data.expires));
       if (isExpired) {
         await signOut();
         location.reload();
@@ -53,9 +53,9 @@ const Header = () => {
     <header className="block text-center w-full">
       <div className="flex justify-between items-center">
         <Image
-          src={isMobile ? sfx_icon : sfx_full_light}
+          src={isMobile ? sfx_icon : minimalist_logo}
           alt="SmartFormX"
-          className={isMobile ? "w-1/12" : "w-1/6"}
+          className={isMobile ? "w-1/12" : "w-40"}
         />
         {data?.user?.plan?.toLocaleLowerCase()==="free" && !isMobile && (
           <div
