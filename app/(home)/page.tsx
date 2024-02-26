@@ -18,10 +18,12 @@ import FormsService from "../api/repository/FormService";
 import UserService from "../api/repository/UserServices";
 import {  AppFetchJSON } from "../api/repository/fetch";
 import UpdatePlanModal from "@/components/UpdatePlanModal";
+import StartModal from "@/components/StartModal";
 
 export default function HomePage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const UpdatePlanDisclosure = useDisclosure();
+  const StartModalDisclosure = useDisclosure();
   
   const [isMobile, setMobileMode] = useState<boolean>(false);
   var session = useSession();
@@ -47,6 +49,13 @@ export default function HomePage() {
     ) {
       onOpen();
     }
+    if (
+      user &&
+      user.firstAccess &&
+      !sessionStorage.getItem("isNotFA")
+    ) {
+      StartModalDisclosure.onOpen();
+    }
 
     (async function () {
       if (session.status == "authenticated" && query.get("up")) {
@@ -66,7 +75,7 @@ export default function HomePage() {
         }
       }
     })();
-  }, [onOpen, session]);
+  }, [onOpen, session, StartModalDisclosure]);
 
   return (
     <div className="w-full h-full flex flex-col justify-around overflow-x-hidden z-0 pt-6">
@@ -85,6 +94,7 @@ export default function HomePage() {
         isOpen={UpdatePlanDisclosure.isOpen}
         onOpenChange={UpdatePlanDisclosure.onOpenChange}
       />
+      <StartModal isOpen={StartModalDisclosure.isOpen} onOpenChange={StartModalDisclosure.onOpenChange}/>
     </div>
   );
 }

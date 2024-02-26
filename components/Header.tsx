@@ -31,7 +31,7 @@ const Header = () => {
       const now = new Date().getTime();
       const expire = new Date(data.expires).getTime()+600000;
       const isExpired = now >= expire;
-console.log(new Date(data.expires));
+      
       if (isExpired) {
         await signOut();
         location.reload();

@@ -2,13 +2,9 @@ import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
-import { compare } from "bcryptjs";
 import AuthenticationService from "../../repository/AuthenticationService";
 
 const authOptions: NextAuthOptions = {
-
-  
-  
   providers: [
     // GoogleProvider({
     //   clientId: process.env.GOOGLE_ID as string,
@@ -23,19 +19,21 @@ const authOptions: NextAuthOptions = {
         const { email, password } = credentials ?? {};
 
         if (!email || !password) {
-          throw new Error(JSON.stringify ({error:"Nome de usuário ou senha ausente"}));
+          throw new Error(
+            JSON.stringify({ error: "Nome de usuário ou senha ausente" })
+          );
         }
         let response = await AuthenticationService.SignIn(email, password);
-        
+
         if (!response.ok) {
           const { message } = await response.json();
-          throw new Error(JSON.stringify ({error: message}));
+          throw new Error(JSON.stringify({ error: message }));
         }
 
-        const {token, user} = await response.json();
+        const { token, user } = await response.json();
 
         const jwt = token;
-      
+
         return {
           ...user,
           jwt,
@@ -43,57 +41,28 @@ const authOptions: NextAuthOptions = {
       },
     }),
   ],
-
   callbacks: {
-    //   async session({ session, token, trigger }) {
-    //     session.user = token;
-    //     return session;
-    //   },
-    //   async jwt({ token, user, trigger, session }) {
-    //     if (trigger === "update" && session.subscribeStatus) {
-    //       token.subscribeStatus = session.subscribeStatus;
-    //       token.plan = session.plan;
-    //       return token;
-    //     }
-    //     if (user) {
-    //       token.id = user.id;
-    //       token.plan = user.plan;
-    //       token.businessId = user.businessId;
-    //       token.subscribeStatus = user.subscribeStatus;
-    //       token.verifiedEmail = user.verifiedEmail;
-    //     }
-    //     return token;
-    //   },
-    jwt: async ({ token, user }) => {
+    jwt: async ({ token, user, trigger, session }) => {
+      if (user) {
+        return {
+          ...token,
+          jwt: user.jwt,
+          subscribeStatus: user.subscribeStatus,
+          plan: user.plan,
+          firstAccess: user.firstAccess,
+        };
+      }
+      return token;
+    },
+    session: async ({ session, token, trigger }) => {
+      if (token) {
+        session.jwt = token.jwt;
+        session.user = token;
+      }
 
-      // const shouldRefreshTime = Math.round((token.jwt - 60 * 60 * 1000) - Date.now());
-
-      
-        // If the token is still valid, just return it.
-        // if (shouldRefreshTime > 0) {
-        //     return Promise.resolve(token);
-        // }
-      // user is only available the first time a user signs in authorized
-       if (user) {
-         return {
-           ...token,
-           jwt: user.jwt,
-           subscribeStatus: user.subscribeStatus,
-           plan: user.plan
-         };
-       }
-       return token;
-     },
-     session: async ({ session, token }) => {
-       if (token) {
-         session.jwt = token.jwt;
-
-         session.user= token;
-       }
-     
-       return session;
-     },
-   },
+      return session;
+    },
+  },
   pages: {
     signIn: "/signin",
     error: "/signin",
@@ -101,7 +70,7 @@ const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: "jwt",
-    maxAge: 7200 //2d
+    maxAge: 172800,
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

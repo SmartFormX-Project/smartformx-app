@@ -7,6 +7,7 @@ interface IUser extends DefaultUser {
    */
   plan?: string;
   subscribeStatus?: string;
+  firstAccess?: boolean;
   /**
    * Field to check whether a user has a subscription
    */

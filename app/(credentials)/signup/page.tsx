@@ -165,46 +165,7 @@ export default function SignUp() {
         >
           <Sidebar currentStepIndex={currentStepIndex} finished={isSuccess} />
           <div className="px-4 pb-10 md:-mt-[0px] md:pb-0">
-            {/* {session.status == "authenticated" && !isSuccess && (
-              <div className="flex justify-end opacity-50 hover:opacity-70 mt-2">
-                <Dropdown>
-                  <DropdownTrigger>
-                    <Chip
-                      variant="flat"
-                      color="secondary"
-                      size="md"
-                      classNames={{
-                        base: "cursor-pointer border-small border-white bg-transparent py-2 px-1",
-                        content: "text-white font-light px-4",
-                      }}
-                      avatar={
-                        <Avatar
-                          size="sm"
-                          showFallback
-                          classNames={{
-                            base: "bg-white",
-                            icon: "text-black/80",
-                          }}
-                          icon={<FiUser />}
-                        />
-                      }
-                    >
-                      {session.data?.user?.name}
-                    </Chip>
-                  </DropdownTrigger>
-                  <DropdownMenu aria-label="Static Actions">
-                    <DropdownItem
-                      color="danger"
-                      key="signout"
-                      onClick={() => signOut()}
-                      startContent={<PiSignOut />}
-                    >
-                      Sair
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-              </div>
-            )} */}
+          
             <section className="h-full overflow-hidden rounded-xl px-6 py-8 md:px-6 lg:w-[550px] lg:px-14">
               {isSuccess ? (
                 <AnimatePresence mode="wait">
