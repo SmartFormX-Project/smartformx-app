@@ -5,13 +5,26 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   /* line-height: 200px; */
-  margin-bottom: 50px;
+  margin-bottom: 15px;
   animation: textAnim 5s ease-in-out infinite;
+}
+.wrapper p {
+  color: #fff;
+  font-size: 14px;
+  letter-spacing: 1px;
+  margin-bottom: 50px;
+  animation: textAnim2 5s ease-in-out infinite;
 }
 
 @keyframes textAnim {
   50% {
     color: #0bec7c;
+  }
+}
+
+@keyframes textAnim2 {
+  50% {
+    color: #000;
   }
 }
 
