@@ -22,12 +22,11 @@ export default function ModalPaymentIssue({
   const { data } = useSession();
 
   const goToPortal = async () => {
-    const uid = data?.user?.id;
-    if (uid) {
+    const user = data?.user;
+    if (user) {
       const { data, status } = await PaymentService.goToStripeCustomerPortal();
       window.location.assign(data.url);
     }
-    console.log("user id not provide, problably you arent logged in");
   };
   return (
     <Modal

@@ -33,11 +33,11 @@ const ReportModal = ({
   const onFormSubmit = (data: any, onClose: any) => {
     const { title, category, description } = data;
 
-    UserService.sendReport({ title, category, description }).then(
-      (res: any) => {
-        if (res.status == 201) onSubmit(onClose);
-      }
-    );
+    // UserService.sendReport({ title, category, description }).then(
+    //   (res: any) => {
+    //     if (res.status == 201) onSubmit(onClose);
+    //   }
+    // );
   };
   return (
     <Modal

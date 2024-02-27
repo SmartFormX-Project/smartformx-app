@@ -21,7 +21,7 @@ export default function MobileHomePage({
   const hasAnalyse = formData.Analyse != null || formData.Analyse != undefined;
   return (
     <div>
-      <Tabs variant="light" className="mt-4 " color="primary" onClick={console.log}>
+      <Tabs variant="light" className="mt-4 " color="primary">
         <Tab key="f" title="Formulário">
           <FormDescription
             formData={formData}
