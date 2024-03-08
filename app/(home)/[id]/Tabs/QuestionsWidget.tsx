@@ -43,7 +43,7 @@ export default function QuestionsWidget({ form }: { form: Form }) {
                 question={el.question}
                 options={el.options}
                 type={el.inputType}
-                values={ans?.ansCount[0].answers ?? []}
+                values={ans?.ansCount[0]!=undefined ? ans?.ansCount[0].answers : []}
               />
             );
         })}
@@ -68,7 +68,7 @@ const Question = ({
   };
   return (
     <div className="flex flex-col m-auto">
-      <h3 className="font-semibold mt-4">{question}</h3>
+      <h3 className="font-semibold mt-4 text-center">{question}</h3>
       {type === "interval" && (
         <div className="flex space-x-4 pt-2 justify-center">
           {iconsIntervalValues.map((e, i) => {
@@ -88,7 +88,7 @@ const Question = ({
           {options!.map((e) => {
             return (
               <div className="flex flex-col items-center">
-                <div className="bg-slate-100 px-2 rounded-full border text-sm">
+                <div className="bg-slate-100 px-2 rounded-full border text-sm text-center">
                   {e}
                 </div>
                 <span className="w-min rounded-full bg-black/60 text-white text-xs px-2 mt-2">

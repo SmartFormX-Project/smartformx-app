@@ -13,7 +13,8 @@ export default function LastAnswersWidget({ form }: { form: Form }) {
     FormsService.FetchFormAnsURL(form.id),
     AppFetchJSON
   );
-  if (!data) return <EmptyState />;
+  var dt = data.response as [];
+  if (dt.length==0) return <EmptyState />;
 
   if (isLoading) return <span>Carregando...</span>;
   if (data) {

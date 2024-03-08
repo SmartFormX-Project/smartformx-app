@@ -1,4 +1,5 @@
 "use client";
+
 import { Input, Button } from "@nextui-org/react";
 import Image from "next/image";
 import { useState } from "react";
@@ -12,9 +13,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import AuthenticationService from "@/app/api/repository/AuthenticationService";
 import { Lock, MessageCircleWarning, ShieldCheck } from "lucide-react";
 
+export const dynamic = 'force-dynamic'
+
 const fetcher = (arg: any, ...args: any) =>
   fetch(arg, ...args).then((res) => res.json());
 
+  
 export default function ResetPasswordForm() {
   const {
     register,
@@ -26,6 +30,7 @@ export default function ResetPasswordForm() {
 
   const searchParams = useSearchParams();
   const router = useRouter();
+
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 

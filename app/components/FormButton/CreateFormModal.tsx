@@ -131,7 +131,7 @@ export default function CreateFormButton({
                   readOnly={loading}
                 />
                 <Textarea
-                  label="Description"
+                  label="Descrição"
                   placeholder="Descreva o intuito do formulário, o que você espera descobrir com as respostas"
                   labelPlacement="outside"
                   {...register("description")}
