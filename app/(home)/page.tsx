@@ -50,8 +50,8 @@ export default function HomePage() {
         )}
         <div className="absolute bottom-10">
           <CreateFormButton
-            // isRedirectSubmit={data ? data.length > 0 : false}
-            isRedirectSubmit={false}
+            isRedirectSubmit={data ? data.length > 0 : false}
+            // isRedirectSubmit={false}
             redirectSubmit={UpdatePlanDisclosure.onOpen}
           />
         </div>
