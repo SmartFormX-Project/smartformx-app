@@ -62,8 +62,13 @@ export default function CreateFormButton({
     { value: "14", label: "14" },
     { value: "15", label: "15" },
   ];
+
   const updateLoading = () => setLoading((prev) => !prev);
   const onSubmit = async (body: any, onClose: any) => {
+
+    // if(isRedirectSubmit){
+    //   redirectSubmit();
+    // }
     body.extra = groupSelected.join(",");
     updateLoading();
 
@@ -331,7 +336,7 @@ function CustomCheckboxGroup({
         <CustomCheckbox value="name">Nome</CustomCheckbox>
         <CustomCheckbox value="sex">Sexo</CustomCheckbox>
         <CustomCheckbox value="email">Email</CustomCheckbox>
-        <CustomCheckbox value="phone">Telefone</CustomCheckbox>
+        {/* <CustomCheckbox value="phone">Telefone</CustomCheckbox> */}
       </CheckboxGroup>
     </div>
   );

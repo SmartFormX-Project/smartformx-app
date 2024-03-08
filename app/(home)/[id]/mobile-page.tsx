@@ -13,6 +13,7 @@ import {
 } from "@nextui-org/react";
 import {
   ArrowLeft,
+  Check,
   ChevronDownIcon,
   Circle,
   Lock,
@@ -76,6 +77,7 @@ export default function HomeMobileMode(props: PageHomeProps) {
                   <span>   {formatDistance(props.data.createdAt, new Date(), {
                 addSuffix: true,
               })}</span>
+               {props.data.status == "open" || props.data.status == "paused" ? (
                   <div className="space-x-2">
                     <Button
                       endContent={<Share2 size={18} />}
@@ -121,6 +123,11 @@ export default function HomeMobileMode(props: PageHomeProps) {
                       </DropdownMenu>
                     </Dropdown>
                   </div>
+                ) : (
+                  <div className="text-green-500 flex items-center">
+                    <Check size={18} className="mr-2" /> Finalizado
+                  </div>
+                )}
                 </div>
               </div>
               <div className="flex w-full h-full flex-grow space-x-4">

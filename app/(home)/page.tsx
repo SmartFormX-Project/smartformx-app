@@ -1,7 +1,7 @@
 "use client";
 import FormCardComponent from "../components/FormCard";
 import SearchInputComponent from "../components/SearchInput";
-import CreateFormButton from "../components/FormButton/CreateFormModal";
+import CreateFormButton from "../components/CreateFormModal";
 import useSWR from "swr";
 import FormsService from "../api/repository/FormService";
 import { AppFetchJSON } from "../api/repository/fetch";
@@ -10,8 +10,12 @@ import Image from "next/image";
 import { emp_form } from "@/assets";
 import { format } from "date-fns";
 import GetStatusForm from "@/utils/get-status-form";
+import { useDisclosure } from "@nextui-org/react";
+import UpdatePlanModal from "../components/Modals/UpdatePlanModal";
 
 export default function HomePage() {
+  const UpdatePlanDisclosure = useDisclosure();
+
   const { data, isLoading, error } = useSWR(
     FormsService.FetchAllFormsURL(),
     AppFetchJSON
@@ -45,8 +49,17 @@ export default function HomePage() {
           </div>
         )}
         <div className="absolute bottom-10">
-          <CreateFormButton />
+          <CreateFormButton
+            // isRedirectSubmit={data ? data.length > 0 : false}
+            isRedirectSubmit={false}
+            redirectSubmit={UpdatePlanDisclosure.onOpen}
+          />
         </div>
+        <UpdatePlanModal
+          hitLimit
+          isOpen={UpdatePlanDisclosure.isOpen}
+          onOpenChange={UpdatePlanDisclosure.onOpenChange}
+        />
       </div>
     );
   }

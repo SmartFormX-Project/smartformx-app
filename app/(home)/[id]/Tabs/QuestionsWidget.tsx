@@ -100,7 +100,7 @@ const Question = ({
         </div>
       )}
       {type === "nps" && (
-        <div className="flex space-x-2 pt-2">
+        <div className="flex space-x-2 pt-2 justify-center">
           {iconsNPSValues.map((e, i) => {
             return (
               <div className="flex flex-col items-center">

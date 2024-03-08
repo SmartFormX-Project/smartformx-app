@@ -13,12 +13,12 @@ export default function LastAnswersWidget({ form }: { form: Form }) {
     FormsService.FetchFormAnsURL(form.id),
     AppFetchJSON
   );
-  var dt = data.response as [];
+  var dt = data ? data.response as []: [];
   if (dt.length==0) return <EmptyState />;
 
   if (isLoading) return <span>Carregando...</span>;
   if (data) {
-    const ans = data.response as [];
+    const ans = dt;
 
     return (
       <div className="flex flex-col mt-4 space-y-3 px-6 max-h-[77dvh] overflow-y-auto overflow-scroll">

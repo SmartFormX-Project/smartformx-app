@@ -155,8 +155,7 @@ const DesktopMode = (props: PageHomeProps) => {
                 addSuffix: true,
               })}
             </span>
-            {/* <span>{props.data.createdAt.toString()}</span> */}
-            {props.data.status == "open"&& props.data.status == "paused" ? (
+            {props.data.status == "open" || props.data.status == "paused" ? (
               <div className="space-x-2 flex">
                 <Button
                   endContent={<Share2 size={18} />}

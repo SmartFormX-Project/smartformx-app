@@ -64,12 +64,12 @@ const UpdatePlanModal = ({
         "Potencialize seus resultados com uma inteligência artificial mais refinada. Aprimore a precisão das análises e tomadas de decisão para um desempenho ainda mais impactante",
       img: inteligence,
     },
-    {
-      title: "Estrategias e estatiscas",
-      description:
-        "Deixe a inteligência artificial criar estratégias elaboradas e fornecer estatísticas detalhadas. Otimize sua abordagem com a orientação avançada da IA.",
-      img: analyse,
-    },
+    // {
+    //   title: "Estrategias e estatiscas",
+    //   description:
+    //     "Deixe a inteligência artificial criar estratégias elaboradas e fornecer estatísticas detalhadas. Otimize sua abordagem com a orientação avançada da IA.",
+    //   img: analyse,
+    // },
     {
       title: "E claro, um suporte 24/7",
       description:
