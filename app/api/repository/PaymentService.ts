@@ -60,6 +60,17 @@ class PaymentServiceClass {
   
       return response;
     }
+    async fetchPlans() {
+      console.log( process.env.NEXT_PUBLIC_BACKEND_URL + "/app/plans")
+      var response = await fetch(this.GetPlansURL(), {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      return response;
+    }
 
     async createFreeAccount( name: string,email: string, price_id:string): Promise<any> {
       var response = await AppFetch(this.URL_BASE + "/start-account/", {
@@ -75,6 +86,7 @@ class PaymentServiceClass {
     }
 
     GetPlansURL(): string { 
+   
      return  process.env.NEXT_PUBLIC_BACKEND_URL + "/app/plans";
     }
   }

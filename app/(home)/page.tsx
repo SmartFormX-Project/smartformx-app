@@ -12,16 +12,81 @@ import { format } from "date-fns";
 import GetStatusForm from "@/utils/get-status-form";
 import { useDisclosure } from "@nextui-org/react";
 import UpdatePlanModal from "../components/Modals/UpdatePlanModal";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useEffect } from "react";
+import ModalPaymentIssue from "../components/Modals/ModalPaymentIssue";
+import PasswordModal from "../components/Modals/PasswordModal";
+import PricingModal from "../components/Modals/PricingModal";
+import { ToastContainer, toast } from "react-toastify";
 
+import "react-toastify/dist/ReactToastify.min.css";
 export default function HomePage() {
+  const { data: session } = useSession();
   const UpdatePlanDisclosure = useDisclosure();
+  const PaymentIssueDisclosure = useDisclosure();
+  const PricingModalDisclosure = useDisclosure();
+  const PasswordModalDisclosure = useDisclosure();
 
   const { data, isLoading, error } = useSWR(
     FormsService.FetchAllFormsURL(),
     AppFetchJSON
   );
 
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+
+    (async function () {
+      if (query.get("up")) {
+        PasswordModalDisclosure.onOpen();
+      }
+    })();
+
+    if (
+      session?.user &&
+      session.user.subscribeStatus != "trialing" &&
+      session.user.subscribeStatus != "active"
+    ) {
+      PaymentIssueDisclosure.onOpen();
+    }
+  }, []);
+
   const sendToFormDetails = (id: string) => location.replace("/" + id);
+
+  const submitPassowrdToSingin = async (password: string, close: any) => {
+    const email = session?.user?.email;
+
+    try {
+      const session = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (session?.ok) {
+        close();  
+        location.replace("/");
+      }
+      else if (session?.error) {
+        const error = JSON.parse(session.error).error;
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+  
+    
+  };
+
   if (data) {
     const forms = data as Form[];
 
@@ -50,16 +115,33 @@ export default function HomePage() {
         )}
         <div className="absolute bottom-10">
           <CreateFormButton
-            isRedirectSubmit={data ? data.length > 0 : false}
-            // isRedirectSubmit={false}
-            redirectSubmit={UpdatePlanDisclosure.onOpen}
+            isRedirectSubmit={
+              session?.user?.plan == "free" ||
+              (session?.user?.plan == "pro" && data.length > 2)
+            }
+            redirectSubmit={PricingModalDisclosure.onOpen}
           />
         </div>
+        <ModalPaymentIssue
+          isOpen={PaymentIssueDisclosure.isOpen}
+          onChange={PaymentIssueDisclosure.onOpenChange}
+          onOpen={PaymentIssueDisclosure.onOpen}
+        />
         <UpdatePlanModal
           hitLimit
           isOpen={UpdatePlanDisclosure.isOpen}
           onOpenChange={UpdatePlanDisclosure.onOpenChange}
         />
+        <PasswordModal
+          onSubmit={submitPassowrdToSingin}
+          isOpen={PasswordModalDisclosure.isOpen}
+          onOpenChange={PasswordModalDisclosure.onOpenChange}
+        />
+        <PricingModal
+          isOpen={PricingModalDisclosure.isOpen}
+          onOpenChange={PricingModalDisclosure.onOpenChange}
+        />
+           <ToastContainer />
       </div>
     );
   }
