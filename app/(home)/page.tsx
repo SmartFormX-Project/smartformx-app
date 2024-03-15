@@ -63,10 +63,9 @@ export default function HomePage() {
       });
 
       if (session?.ok) {
-        close();  
+        close();
         location.replace("/");
-      }
-      else if (session?.error) {
+      } else if (session?.error) {
         const error = JSON.parse(session.error).error;
         toast.error(error, {
           position: "top-right",
@@ -80,11 +79,8 @@ export default function HomePage() {
         });
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-
-  
-    
   };
 
   if (data) {
@@ -116,8 +112,8 @@ export default function HomePage() {
         <div className="absolute bottom-10">
           <CreateFormButton
             isRedirectSubmit={
-              session?.user?.plan == "free" ||
-              (session?.user?.plan == "pro" && data.length > 2)
+              (session?.user?.plan == "free" && data.length > 0) ||
+              session?.user?.plan == "pro"&& data.length > 2
             }
             redirectSubmit={PricingModalDisclosure.onOpen}
           />
@@ -141,7 +137,7 @@ export default function HomePage() {
           isOpen={PricingModalDisclosure.isOpen}
           onOpenChange={PricingModalDisclosure.onOpenChange}
         />
-           <ToastContainer />
+        <ToastContainer />
       </div>
     );
   }
