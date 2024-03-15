@@ -27,7 +27,6 @@ import {
   BadgeCheck,
   CheckIcon,
   Headphones,
-  HelpCircle,
   LayoutGrid,
   LineChart,
   Plus,
@@ -35,17 +34,23 @@ import {
   Tags,
 } from "lucide-react";
 import FormsService from "@/app/api/repository/FormService";
+import useSWR from "swr";
+import UserService from "@/app/api/repository/UserServices";
+import { AppFetchJSON } from "@/app/api/repository/fetch";
 
 export default function CreateFormButton({
-  isRedirectSubmit = false,
   redirectSubmit = () => {},
 }: {
-  isRedirectSubmit?: boolean;
   redirectSubmit?: () => void;
 }) {
+  const { data, isLoading } = useSWR(
+    UserService.FetchIfIsAllowToCreateURL(),
+    AppFetchJSON
+  );
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [groupSelected, setGroupSelected] = React.useState<any[]>([]);
-  // const [maxQuestionSelected, setMaxQuestionSelected] = React.useState<any>();
+
   const [loading, setLoading] = useState<boolean>(false);
   const { register, handleSubmit, reset, getValues } = useForm();
 
@@ -65,10 +70,6 @@ export default function CreateFormButton({
 
   const updateLoading = () => setLoading((prev) => !prev);
   const onSubmit = async (body: any, onClose: any) => {
-
-    // if(isRedirectSubmit){
-    //   redirectSubmit();
-    // }
     body.extra = groupSelected.join(",");
     updateLoading();
 
@@ -108,7 +109,8 @@ export default function CreateFormButton({
         className="self-center animate-fade-up "
         style={{ animationDelay: "0.15s", animationFillMode: "forwards" }}
         startContent={<Plus />}
-        onClick={() => (isRedirectSubmit ? redirectSubmit() : onOpen())}
+        onClick={() => (data && data.available ? onOpen() : redirectSubmit())}
+        isLoading={isLoading}
       >
         Criar formulário
       </Button>
@@ -130,18 +132,18 @@ export default function CreateFormButton({
                   type="text"
                   label="Titulo"
                   placeholder="Digite um titulo para o form."
-                  isRequired
                   labelPlacement="outside"
-                  {...register("title")}
                   readOnly={loading}
+                  {...register("title")}
+                  isRequired
                 />
                 <Textarea
                   label="Descrição"
                   placeholder="Descreva o intuito do formulário, o que você espera descobrir com as respostas"
                   labelPlacement="outside"
-                  {...register("description")}
                   readOnly={loading}
                   isRequired
+                  {...register("description")}
                 ></Textarea>
 
                 <CustomCheckboxGroup
@@ -175,7 +177,12 @@ export default function CreateFormButton({
                 </div>
               </ModalBody>
               <ModalFooter className={"justify-start sm:justify-end"}>
-                <Button color="danger" variant="light" onPress={onClose} isDisabled={loading}>
+                <Button
+                  color="danger"
+                  variant="light"
+                  onPress={onClose}
+                  isDisabled={loading}
+                >
                   Cancelar
                 </Button>
                 <Button type="submit" color="primary" isLoading={loading}>

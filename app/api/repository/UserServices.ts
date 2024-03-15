@@ -16,18 +16,20 @@ class UserServiceClass {
 
     return { data: response, status: response.status };
   }
-  async SendStartForm(form:any) {
-    var response = await AppFetch(this.URL_BASE+"/start-form", {
+  async SendStartForm(form: any) {
+    var response = await AppFetch(this.URL_BASE + "/start-form", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
 
     return response;
   }
-
+  FetchIfIsAllowToCreateURL() {
+    return this.URL_BASE + "/sub-allowed";
+  }
 }
 
 var UserService = new UserServiceClass();

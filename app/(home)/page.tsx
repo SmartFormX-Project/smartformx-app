@@ -110,13 +110,7 @@ export default function HomePage() {
           </div>
         )}
         <div className="absolute bottom-10">
-          <CreateFormButton
-            isRedirectSubmit={
-              (session?.user?.plan == "free" && data.length > 0) ||
-              session?.user?.plan == "pro"&& data.length > 2
-            }
-            redirectSubmit={PricingModalDisclosure.onOpen}
-          />
+          <CreateFormButton redirectSubmit={PricingModalDisclosure.onOpen} />
         </div>
         <ModalPaymentIssue
           isOpen={PaymentIssueDisclosure.isOpen}
