@@ -34,7 +34,7 @@ export default async function RootLayout({
         inter.className + " flex flex-col h-screen w-full overflow-hidden p-4"
       }
     >
-      <HeaderComponent my_info_text={t("header.my-info")} signout_text={t("header.sign-out")} />
+      <HeaderComponent lang={lng} my_info_text={t("header.my-info")} signout_text={t("header.sign-out")} />
       {children}
 
       <ChatwootWidget

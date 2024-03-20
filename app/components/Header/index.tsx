@@ -16,9 +16,16 @@ import ProfileModal from "../Modals/ProfileModal";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "@/app/i18n/client";
 
-export default function HeaderComponent({my_info_text, signout_text}:{my_info_text:string, signout_text:string}) {
-
-  const path = usePathname()
+export default function HeaderComponent({
+  my_info_text,
+  signout_text,
+  lang
+}: {
+  my_info_text: string;
+  signout_text: string;
+  lang: string;
+}) {
+  const path = usePathname();
 
   const ProfileModalDisclosure = useDisclosure();
   return (
@@ -37,8 +44,8 @@ export default function HeaderComponent({my_info_text, signout_text}:{my_info_te
             }}
             avatar={
               <Avatar
-              isBordered
-              // radius="sm"
+                isBordered
+                // radius="sm"
                 size="lg"
                 showFallback
                 classNames={{
@@ -62,12 +69,13 @@ export default function HeaderComponent({my_info_text, signout_text}:{my_info_te
             key="signout"
             onClick={() => signOut()}
             startContent={<LogOut size={18} />}
-            >
+          >
             {signout_text}
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
       <ProfileModal
+        lng={lang}
         isOpen={ProfileModalDisclosure.isOpen}
         onOpenChange={ProfileModalDisclosure.onOpenChange}
       />
