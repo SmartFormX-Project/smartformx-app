@@ -1,6 +1,7 @@
 "use client";
 import PaymentService from "@/app/api/repository/PaymentService";
 import { BasicFetch } from "@/app/api/repository/fetch";
+import { useTranslation } from "@/app/i18n/client";
 import {
   Modal,
   ModalContent,
@@ -18,10 +19,14 @@ import useSWR from "swr";
 export default function PricingModal({
   isOpen,
   onOpenChange,
+  lng,
 }: {
   isOpen: boolean;
   onOpenChange: () => void;
+  lng: string;
 }) {
+  const { t } = useTranslation(lng, "modals");
+
   const { data: session } = useSession();
   const { data, isLoading } = useSWR(PaymentService.GetPlansURL(), BasicFetch);
 
@@ -47,9 +52,11 @@ export default function PricingModal({
           <>
             <ModalHeader>
               <h3 className="text-xl font-semibold text-center m-auto">
-                Ops! Limite alcançado! Hora de dar um upgrade no plano... ; )
+                {/* Ops! Limite alcançado! Hora de dar um upgrade no plano... ; ) */}
+                {t("pricing-modal.title")}
                 <br />
-                Aproveite um universo de possibilidades
+                {/* Aproveite um universo de possibilidades */}
+                {t("pricing-modal.description")}
               </h3>
             </ModalHeader>
             <ModalBody>
@@ -60,7 +67,7 @@ export default function PricingModal({
                 >
                   <div className="flex">
                     <span className={`mr-2 ${annualy ? "opacity-30" : ""}`}>
-                      Mensal
+                      {t("pricing-modal.option.monthly")}
                     </span>
                     <Switch
                       defaultSelected
@@ -68,7 +75,7 @@ export default function PricingModal({
                       aria-label="Annually"
                     />
                     <span className={!annualy ? "opacity-30" : ""}>
-                      Semestral
+                      {t("pricing-modal.option.semester")}
                     </span>
                   </div>
                   <div className="space-y-5 px-4 py-4">
@@ -84,6 +91,7 @@ export default function PricingModal({
                           if (p.name != "FREE")
                             return (
                               <PricingCard
+                                t={t}
                                 currentPlan={
                                   session?.user?.plan?.toLocaleLowerCase() ==
                                   p.name.toLocaleLowerCase()
@@ -108,7 +116,7 @@ export default function PricingModal({
                       variant="bordered"
                       endContent={<ArrowRight size={16} className="ml-2" />}
                     >
-                      Precisa de mais? Entre em contato conosco
+                      {t("pricing-modal.link")}
                     </Button>
                   </Link>
                 </div>
@@ -130,8 +138,10 @@ const PricingCard = ({
   onSumit,
   total,
   features,
+  t,
 }: {
   title: string;
+  t: any;
   symbolPrice: string;
   price: string;
   total: string;
@@ -155,12 +165,12 @@ const PricingCard = ({
                   <span>{price.trim().split("\\s+")[0]}</span>
                 </div>
                 <span className="pt-1.5 text-xs">
-                  por mês{isSemesterly ? "*" : ""}
+                {t("pricing-modal.by-month")}{isSemesterly ? "*" : ""}
                 </span>
               </div>
               <div className="text-sm">
                 {isSemesterly ? symbolPrice + " " + total : ""}{" "}
-                {isSemesterly ? " semestralmente" : ""}
+                {isSemesterly ? " " + t("pricing-modal.semester") : ""}
               </div>
               <div className="text-sm"></div>
             </div>
@@ -229,7 +239,9 @@ const PricingCard = ({
           </div>
           <div className="pt-2">
             {currentPlan ? (
-              <span className="font-semibold ">Plano atual</span>
+              <span className="font-semibold ">
+                +{t("pricing-modal.current-plan")}
+              </span>
             ) : (
               <button
                 type="button"
@@ -237,7 +249,7 @@ const PricingCard = ({
                 className="appearance-none inline-flex hover:shadow-2xl transition-all duration-300 hover:scale-105 items-center group space-x-2.5 bg-black text-white py-4 px-5 rounded-2xl cursor-pointer"
               >
                 <span className="w-full font-semibold text-base">
-                  Escolher {title}
+                  {t("pricing-modal.choose")} {title}
                 </span>
                 <svg
                   className="inline-block h-6"

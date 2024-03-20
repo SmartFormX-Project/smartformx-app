@@ -3,6 +3,7 @@
 import businessService from "@/app/api/repository/BussinessService";
 import PaymentService from "@/app/api/repository/PaymentService";
 import { AppFetchJSON } from "@/app/api/repository/fetch";
+import { useTranslation } from "@/app/i18n/client";
 import {
   Button,
   Modal,
@@ -18,11 +19,15 @@ import useSWR from "swr";
 export default function ProfileModal({
   isOpen,
   onOpenChange,
+  lng
 }: {
   isOpen: boolean;
   onOpenChange: () => void;
+  lng: string;
 }) {
   const session = useSession();
+
+  const {t} = useTranslation(lng, "modals");
   // const { data, isLoading, error } = useSWR(
   //   businessService.getBusinessURL(),
   //   AppFetchJSON
@@ -108,6 +113,7 @@ export default function ProfileModal({
               <CardPlan
                 description={session.data?.user?.subscribeStatus!}
                 name={session.data?.user?.plan ?? ""}
+                buttonText={ t("profile-modal.button")}
                 // description={""}
                 // name={""}
                 onChangeSubmit={goToPortal}
@@ -143,7 +149,9 @@ const CardPlan = ({
   name,
   description,
   onChangeSubmit,
+  buttonText
 }: {
+  buttonText: string;
   name: string;
   description: string;
   onChangeSubmit: () => void;
@@ -168,7 +176,7 @@ const CardPlan = ({
             onClick={onChangeSubmit}
             size="sm"
           >
-            Alterar
+            {buttonText}
           </Button>
         </div>
       </div>

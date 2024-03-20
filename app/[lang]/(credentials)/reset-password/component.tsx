@@ -5,8 +5,18 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import AuthenticationService from "@/app/api/repository/AuthenticationService";
 import { Mail, ArrowLeft, KeyRound } from "lucide-react";
+import { useTranslation } from "@/app/i18n/client";
 
-export default function ResetPasswordForm() {
+export default function ResetPasswordForm({
+  params: { lang },
+}: {
+  params: {
+    lang: string;
+  };
+}) {
+
+  const { t } = useTranslation(lang, "credentials");
+
   const {
     register,
     handleSubmit,
@@ -15,7 +25,7 @@ export default function ResetPasswordForm() {
   } = useForm();
 
   const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [sent, setSent] = useState(true);
   const router = useRouter();
   const udpateLoading = () => setLoading((prev) => !prev);
 
@@ -31,19 +41,16 @@ export default function ResetPasswordForm() {
   };
 
   return (
-    <section className="bg-black">
+    <section className="dark bg-black h-screen">
       {sent ? (
         <div className="max-w-4xl my-auto mx-auto px-4 sm:px-6 flex flex-col justify-center text-center items-center h-screen">
           <div className="my-auto">
-            <Mail size={200} className="text-white/50 m-auto mb-6" />
-            <h1 className=" mb-2 font-bol text-2xl">
-              Um e-mail com as instruções de recuperação foi enviado
+            <Mail size={200} className="text-foreground-500 m-auto mb-6" />
+            <h1 className="text-foreground-500 mb-2 font-bol text-2xl">
+            {t("forgot-email-sent.title")}
             </h1>
             <p className="text-xl text-foreground-300 mb-6">
-              Por favor, verifique sua caixa de entrada. Se não encontrar o
-              e-mail em alguns minutos, verifique também sua pasta de spam.
-              Lembre-se de proteger suas informações. Não compartilhe sua senha
-              com ninguém.
+            {t("forgot-email-sent.description")}
             </p>
             <Button
               onClick={() => router.push("/signin")}
@@ -63,7 +70,7 @@ export default function ResetPasswordForm() {
             startContent={<ArrowLeft />}
             variant="flat"
           >
-            Voltar
+            {t("forgot-password.back-button")}
           </Button>
           <div className="pt-32 pb-12 md:pt-40 md:pb-20">
             {/* Page header */}
@@ -72,33 +79,31 @@ export default function ResetPasswordForm() {
                 size={100}
                 className="text-white/50 m-auto mb-4"
               />
-              <h1 className=" mb-2 font-bol text-2xl">
-                Vamos colocar você de pé novamente!
+              <h1 className="text-foreground-500 mb-2 font-bol text-2xl">
+              {t("forgot-password.title")}
               </h1>
               <p className="text-xl text-foreground-300">
-                Digite o endereço de e-mail que você usou quando se inscreveu em
-                sua conta e enviaremos um e-mail com um link para redefinir sua
-                senha.
+              {t("forgot-password.description")}
               </p>
             </div>
             <div className="max-w-sm mx-auto">
               <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex flex-wrap -mx-3 mb-4">
+                <div className=" dark flex flex-wrap -mx-3 mb-4">
                   <Input
                     radius="sm"
                     type="text"
-                    label="Email"
-                    placeholder="Digite seu email"
+                    label={t("forgot-password.input.email.label")}
+                    placeholder={t("forgot-password.input.email.placeholder")}
                     size="lg"
                     labelPlacement="outside"
                     {...register("email", {
-                      required: "Digite um email válido",
+                      required: t("forgot-password.input.email.error"),
                       pattern:
                         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
                     })}
                     isInvalid={!isValid && isSubmitted}
                     errorMessage={
-                      !isValid && isSubmitted && "Digite um email válido"
+                      !isValid && isSubmitted && t("forgot-password.input.email.error")
                     }
                     isRequired
                   />
@@ -112,7 +117,7 @@ export default function ResetPasswordForm() {
                       type="submit"
                       isLoading={loading}
                     >
-                      Enviar link
+                      {t("forgot-password.button")}
                     </Button>
                   </div>
                 </div>

@@ -1,4 +1,4 @@
-import React, {forwardRef} from "react";
+import React, {ForwardRefRenderFunction, forwardRef} from "react";
 import {useInput} from "@nextui-org/react";
 import { SearchIcon, XCircleIcon } from "lucide-react";
 
@@ -23,8 +23,14 @@ const styles = {
     "!cursor-text",
   ],
 };
+interface MyInputProps {
+  label?: string;
+  placeholder?: string;
+  // Define other props if needed
+}
 
-const MyInput = forwardRef((props, ref: any) => {
+const MyInput: ForwardRefRenderFunction<any, MyInputProps> =((props, ref: any) => {
+
   const {
     Component,
     label,
@@ -47,9 +53,9 @@ const MyInput = forwardRef((props, ref: any) => {
   } = useInput({
     ...props,
     ref,
-    label: "Pesquise um smartform",
+    label: props.label || "Pesquise um smartform",
     type: "search",
-    placeholder: "Digite pelo menos 3 caracteres...",
+    placeholder: props.placeholder ||"Digite pelo menos 3 caracteres...",
     startContent: (
       <SearchIcon size={20} className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
     ),
@@ -106,4 +112,4 @@ const MyInput = forwardRef((props, ref: any) => {
 
 MyInput.displayName = "MyInput";
 
-export default MyInput;
+export default forwardRef(MyInput);

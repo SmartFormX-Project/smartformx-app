@@ -1,3 +1,4 @@
+import { useTranslation } from "@/app/i18n/client";
 import { Button } from "@nextui-org/button";
 import {
   Modal,
@@ -11,11 +12,14 @@ const ConfirmActionModal = ({
   onSubmit,
   isOpen,
   onOpenChange,
+  lng,
 }: {
   onSubmit: (onClose: any) => void;
   isOpen: boolean;
   onOpenChange: () => void;
+  lng: string;
 }) => {
+  const { t } = useTranslation(lng, "modals");
 
   return (
     <Modal
@@ -27,19 +31,24 @@ const ConfirmActionModal = ({
       <ModalContent>
         {(onClose: any) => (
           <>
-          <ModalHeader>
-
-            <h3 className="text-xl font-semibold">Deseja realmente fechar o formulário?</h3> 
-          </ModalHeader>
+            <ModalHeader>
+              <h3 className="text-xl font-semibold">
+                {t("confirm-modal.title")}
+              </h3>
+            </ModalHeader>
             <ModalBody>
-            <span className="text-sm">Após fechado ele não poderá ser aberto novamente.</span> 
+              <span className="text-sm">{t("confirm-modal.description")}</span>
             </ModalBody>
             <ModalFooter>
               <Button color="default" onPress={onClose}>
-                Cancelar
+                {t("confirm-modal.cancel-button")}
               </Button>
-              <Button color="primary" type="submit" onClick={()=>onSubmit(onClose)}>
-                Fechar Formulário
+              <Button
+                color="primary"
+                type="submit"
+                onClick={() => onSubmit(onClose)}
+              >
+                {t("confirm-modal.confirm-button")}
               </Button>
             </ModalFooter>
           </>

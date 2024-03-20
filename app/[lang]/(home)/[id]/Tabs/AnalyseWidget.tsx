@@ -24,78 +24,12 @@ import Image from "next/image";
 export default function AnalyseWidget({
   data,
   isBlocked = false,
+  t
 }: {
   data: Form;
   isBlocked?: boolean;
+  t:any
 }) {
-  // const ins = [
-  //   {
-  //     id: "95d7f65f-2a4f-4c45-9d00-9ad2ea67114b",
-  //     title: "Baixa satisfação com a variedade de produtos/serviços",
-  //     type: "negativo",
-  //     description:
-  //       "Os clientes estão muito insatisfeitos com a variedade de produtos/serviços oferecidos.",
-  //     howToImprove: null,
-  //     createdAt: "2024-02-22T00:37:43.339Z",
-  //     updateAt: "2024-02-22T00:37:43.339Z",
-  //     analyseId: "7c995219-22e2-442d-900e-4aa907366fbc",
-  //   },
-  //   {
-  //     id: "1b94967f-292f-4161-b529-dc6d67901681",
-  //     title: "Alta probabilidade de retorno",
-  //     type: "positivo",
-  //     description:
-  //       "A maioria dos clientes demonstrou alta probabilidade de retorno ao negócio.",
-  //     howToImprove: null,
-  //     createdAt: "2024-02-22T00:37:43.339Z",
-  //     updateAt: "2024-02-22T00:37:43.339Z",
-  //     analyseId: "7c995219-22e2-442d-900e-4aa907366fbc",
-  //   },
-  //   {
-  //     id: "1b94967f-292f-4161-b529-dc6d67901681",
-  //     title: "Alta probabilidade de retorno",
-  //     type: "positivo",
-  //     description:
-  //       "A maioria dos clientes demonstrou alta probabilidade de retorno ao negócio.",
-  //     howToImprove: null,
-  //     createdAt: "2024-02-22T00:37:43.339Z",
-  //     updateAt: "2024-02-22T00:37:43.339Z",
-  //     analyseId: "7c995219-22e2-442d-900e-4aa907366fbc",
-  //   },
-  //   {
-  //     id: "1b94967f-292f-4161-b529-dc6d67901681",
-  //     title: "Alta probabilidade de retorno",
-  //     type: "positivo",
-  //     description:
-  //       "A maioria dos clientes demonstrou alta probabilidade de retorno ao negócio.",
-  //     howToImprove: null,
-  //     createdAt: "2024-02-22T00:37:43.339Z",
-  //     updateAt: "2024-02-22T00:37:43.339Z",
-  //     analyseId: "7c995219-22e2-442d-900e-4aa907366fbc",
-  //   },
-  //   {
-  //     id: "1b94967f-292f-4161-b529-dc6d67901681",
-  //     title: "Alta probabilidade de retorno",
-  //     type: "positivo",
-  //     description:
-  //       "A maioria dos clientes demonstrou alta probabilidade de retorno ao negócio.",
-  //     howToImprove: null,
-  //     createdAt: "2024-02-22T00:37:43.339Z",
-  //     updateAt: "2024-02-22T00:37:43.339Z",
-  //     analyseId: "7c995219-22e2-442d-900e-4aa907366fbc",
-  //   },
-  // ];
-  // const keywors = [
-  //   "impact",
-  //   "etc",
-  //   "sdadasd",
-  //   "spoerreadas",
-  //   "asdasdsd",
-  //   "retsd",
-  // ];
-  // const result =
-  //   " is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
-
   const startAnlyse = async () => {
     const res = await AnalyseService.createAnalyses(data?.id);
 
@@ -109,7 +43,7 @@ export default function AnalyseWidget({
   return data.Analyse == undefined ? (
     <EmptyState onStartAnalyse={startAnlyse} />
   ) : (
-    <DataState insights={data.Analyse.Topics} keywords={data.Analyse.keywords} result={data.Analyse.summary} />
+    <DataState insights={data.Analyse.Topics} t={t} keywords={data.Analyse.keywords} result={data.Analyse.summary} />
   );
   // return <DataState insights={ins} keywords={keywors} result={result} />;
 }
@@ -119,11 +53,13 @@ const DataState = ({
   insights,
   result,
   isMobile,
+  t
 }: {
   keywords: string[];
   insights: any[];
   result: string;
   isMobile?: boolean;
+  t:any
 }) => {
   const thumbs = insights.reduce(
     (count, e) => {
@@ -142,7 +78,7 @@ const DataState = ({
         <div className="bg-[#7928CA] text-white flex items-center justify-center rounded-lg h-9 w-9 text-xl">
           <Key size={18} />
         </div>
-        <h1 className="font-medium text-xl text-[#7928CA]">Palavras chave</h1>
+        <h1 className="font-medium text-xl text-[#7928CA]">{t("home-details.tabs.analyse.keywords")}</h1>
       </div>
       <div className="flex flex-wrap gap-2">
         {keywords.map((e, i) => {
@@ -182,7 +118,7 @@ const DataState = ({
         <div className="bg-[#7928CA] text-white flex items-center justify-center rounded-lg h-9 w-9 text-xl">
           <Activity size={18} />
         </div>
-        <h1 className="font-medium text-xl text-[#7928CA]">Conclusão</h1>
+        <h1 className="font-medium text-xl text-[#7928CA]">{t("home-details.tabs.analyse.result")}</h1>
       </div>
       <p className="text-black/50 text-sm font-light">{result}</p>
     </div>

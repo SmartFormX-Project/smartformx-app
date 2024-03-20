@@ -1,24 +1,53 @@
 import "./globals.css";
 
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { dir } from "i18next";
+import { languages, fallbackLng } from '../i18n/settings'
+import { useTranslation } from '../i18n'
+
 import Providers from "./providers";
-import HeaderComponent from "./components/Header";
+
+
+export async function generateStaticParams() {
+  return languages.map((lng) => ({ lng }))
+}
+
+export async function generateMetadata({ params: { lng } }: {
+  params: {
+    lng: string;
+  };
+}) {
+  if (languages.indexOf(lng) < 0) lng = fallbackLng
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { t } = await useTranslation(lng)
+  return {
+    title: t('title'),
+    content: ''
+  }
+}
+
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "SmartFormX",
-};
+// export const metadata: Metadata = {
+//   title: "Dashboard",
+//   description: "SmartFormX",
+// };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+  params: {
+    lng
+  }
+}: {
   children: React.ReactNode;
-}>) {
+  params: {
+    lng: string;
+  };
+}) {
   return (
-    <html lang="en">
+    // dir={dir(lng)}
+    <html lang={lng}>
       <head>
       <link
           rel="apple-touch-icon"

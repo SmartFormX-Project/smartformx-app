@@ -1,7 +1,8 @@
-"use client"
+"use client";
+import { useTranslation } from "@/app/i18n/client";
 import { Button } from "@nextui-org/button";
 import {
-    Input,
+  Input,
   Modal,
   ModalBody,
   ModalContent,
@@ -14,13 +15,15 @@ const PasswordModal = ({
   onSubmit,
   isOpen,
   onOpenChange,
+  lng,
 }: {
-  onSubmit: (pass:string, onClose: any) => void;
+  onSubmit: (pass: string, onClose: any) => void;
   isOpen: boolean;
   onOpenChange: () => void;
+  lng: string;
 }) => {
-
-    const [pass,setPass] = useState<string>("");
+  const { t } = useTranslation(lng, "modals");
+  const [pass, setPass] = useState<string>("");
 
   return (
     <Modal
@@ -34,18 +37,18 @@ const PasswordModal = ({
         {(onClose: any) => (
           <>
             <ModalHeader>
-              <h3 className="text-xl font-semibold">Confirme sua conta</h3>
+              <h3 className="text-xl font-semibold">{t("password-modal.title")}</h3>
             </ModalHeader>
             <ModalBody>
               <Input
                 type="password"
-                label="Digite sua senha"
+                label= {t("password-modal.input.label")}
                 radius="sm"
-                placeholder="Sua senha possui 8 ou mais caracteres"
+                placeholder= {t("password-modal.input.placeholder")}
                 size="lg"
                 fullWidth
                 labelPlacement="outside"
-                onChange={(el)=>setPass(el.target.value)}
+                onChange={(el) => setPass(el.target.value)}
                 required
               />
             </ModalBody>
@@ -53,9 +56,9 @@ const PasswordModal = ({
               <Button
                 color="primary"
                 type="submit"
-                onClick={() => onSubmit(pass,onClose)}
+                onClick={() => onSubmit(pass, onClose)}
               >
-                Concluir
+                 {t("password-modal.button")}
               </Button>
             </ModalFooter>
           </>

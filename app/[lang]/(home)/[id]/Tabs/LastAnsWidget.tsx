@@ -4,11 +4,12 @@ import { AppFetchJSON } from "@/app/api/repository/fetch";
 import { emp_ans } from "@/assets";
 import { Form } from "@/types/interfaces";
 import { formatDistance } from "date-fns";
+import { enUS, ptBR } from "date-fns/locale";
 import { Check } from "lucide-react";
 import Image from "next/image";
 import useSWR from "swr";
 
-export default function LastAnswersWidget({ form }: { form: Form }) {
+export default function LastAnswersWidget({ form,t,lng }: { form: Form,t:any, lng:string }) {
   const { data, isLoading } = useSWR(
     FormsService.FetchFormAnsURL(form.id),
     AppFetchJSON
@@ -30,6 +31,7 @@ export default function LastAnswersWidget({ form }: { form: Form }) {
               name={"#" + (an.name == "" ? an.referenceCode : an.name)}
               time={formatDistance(an.createdAt, new Date(), {
                 addSuffix: true,
+                locale: lng == "en" ? enUS : ptBR,
               })}
             />
           );

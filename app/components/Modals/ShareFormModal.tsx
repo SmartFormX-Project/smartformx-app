@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "@/app/i18n/client";
 import { Button } from "@nextui-org/button";
 import {
   Modal,
@@ -18,15 +19,20 @@ const ShareFormModal = ({
   isOpen,
   code,
   onOpenChange,
+  lng,
 }: {
   isOpen: boolean;
   code: string;
   onOpenChange: () => void;
+  lng: string;
 }) => {
-  const { SVG } = useQRCode();
+  const { t } = useTranslation(lng, "modals");
+  let elementRef = useRef(null);
+
   const url = process.env.NEXT_PUBLIC_FORM_URL + code;
   const DonwloadQr = () => htmlToImageConvert();
-  let elementRef = useRef(null);
+
+  const { SVG } = useQRCode();
 
   const htmlToImageConvert = () => {
     toPng(elementRef.current!, { cacheBust: false })
@@ -72,10 +78,11 @@ const ShareFormModal = ({
                 className="m-auto w-fit"
                 codeString={url}
               >
-                Link para o formulario
+                {t("share-modal.snippet")}
               </Snippet>
               <span className="mb-4 text-center">
-                Use o qr-code ou copie e envie o link! ;)
+                {/* Use o qr-code ou copie e envie o link! ;) */}
+                {t("share-modal.span")}
               </span>
             </ModalBody>
             <ModalFooter>
@@ -86,7 +93,7 @@ const ShareFormModal = ({
                 // onPress={() => onSubmit(onClose)}
                 onClick={DonwloadQr}
               >
-                Download
+                {t("share-modal.button")}
               </Button>
             </ModalFooter>
           </>

@@ -4,18 +4,26 @@ import "react-toastify/dist/ReactToastify.min.css";
 
 import { sfx_logo } from "@/assets";
 import { Button, Input } from "@nextui-org/react";
-
-import { signIn } from "next-auth/react";
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import AuthenticationService from "@/app/api/repository/AuthenticationService";
+import { signIn } from "next-auth/react";
 import { Check, Eye, EyeOff, X } from "lucide-react";
 
-export default function SignInForm() {
-  const { register, handleSubmit } = useForm();
+import Image from "next/image";
+import Link from "next/link";
+import AuthenticationService from "@/app/api/repository/AuthenticationService";
+import { useTranslation } from "@/app/i18n/client";
+
+export default function SignInForm({
+  params: { lang },
+}: {
+  params: {
+    lang: string;
+  };
+}) {
+  const { t } = useTranslation(lang, "credentials");
+
   const [loading, setLoading] = useState(false);
   const [loadingG, setLoadingG] = useState(false);
   const [signup, setSignup] = useState(false);
@@ -82,7 +90,7 @@ export default function SignInForm() {
         });
       }
     } else {
-      toast.error("Cadastro inválido. Verifique os dados e tente novamente", {
+      toast.error(t("signup.error"), {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -118,7 +126,7 @@ export default function SignInForm() {
           <div className="max-w-3xl mx-auto mt-8 flex flex-col justify-center items-center">
             <Image src={sfx_logo} alt="" />
             <h1 className="text-4xl font-light text-foreground-500 mt-4">
-              Conecte-se
+              {t("h1")}
             </h1>
           </div>
           <div className="">
@@ -127,32 +135,33 @@ export default function SignInForm() {
                 <RegisterComponent
                   loading={loading}
                   onSubmit={onSubmitRegister}
+                  t={t} 
                 />
               ) : (
-                <SigninComponent loading={loading} onSubmit={onSubmit} />
+                <SigninComponent loading={loading} onSubmit={onSubmit} t={t} />
               )}
             </div>
           </div>
           {signup ? (
             <div className="text-foreground-400 text-center mt-4">
-              Tem uma conta?{" "}
+              <span>{t("signup.link.text")}</span>{" "}
               <Button
                 size="sm"
                 onClick={() => setSignup(false)}
                 className="text-primary-500 font-medium hover:underline transition duration-150 ease-in-out"
               >
-                Entre
+                {t("signup.link.button")}
               </Button>
             </div>
           ) : (
             <div className="text-foreground-400 text-center mt-6">
-              Você não tem uma conta?{" "}
+              <span>{t("signin.link.text")}</span>{" "}
               <Button
                 size="sm"
                 onClick={() => setSignup(true)}
                 className="text-primary-500 font-medium hover:underline transition duration-150 ease-in-out"
               >
-                Inscrever-se
+                {t("signin.link.button")}
               </Button>
             </div>
           )}
@@ -167,9 +176,11 @@ export default function SignInForm() {
 const SigninComponent = ({
   onSubmit,
   loading,
+  t,
 }: {
   onSubmit: any;
   loading: boolean;
+  t: any;
 }) => {
   const {
     register,
@@ -185,8 +196,8 @@ const SigninComponent = ({
           <Input
             radius="sm"
             type="email"
-            label="Email"
-            placeholder="Digite seu e-mail"
+            label={t("signin.labels.email")}
+            placeholder={t("signin.placeholder.email")}
             size="lg"
             labelPlacement="outside"
             {...register("email")}
@@ -197,9 +208,9 @@ const SigninComponent = ({
         <div className="w-full px-3">
           <Input
             type="password"
-            label="Senha"
+            label={t("signin.labels.pass")}
             radius="sm"
-            placeholder="Sua senha possui 8 ou mais caracteres"
+            placeholder={t("signin.placeholder.pass")}
             size="lg"
             labelPlacement="outside"
             {...register("password")}
@@ -209,7 +220,7 @@ const SigninComponent = ({
             href="/reset-password"
             className="text-sm font-medium text-primary-500  hover:underline mt-2 flex justify-end"
           >
-            Esqueci minha senha
+            {t("signin.link.forgot")}
           </Link>
         </div>
       </div>
@@ -223,7 +234,7 @@ const SigninComponent = ({
             type="submit"
             isLoading={loading}
           >
-            Entrar
+            {t("signin.submitButton")}
           </Button>
         </div>
       </div>
@@ -234,8 +245,10 @@ const SigninComponent = ({
 const RegisterComponent = ({
   onSubmit,
   loading,
+  t
 }: {
   onSubmit: any;
+  t: any;
   loading: boolean;
 }) => {
   const {
@@ -261,19 +274,19 @@ const RegisterComponent = ({
     const requirements = [
       // Must be at least 8 characters
       {
-        message: "Minimo 8 caracteres",
+        message: t("signup.inputs.password.requirements.min"),
         valid: password.length >= 8,
       },
       {
-        message: "Pelo menos 1 letra maiuscula",
+        message: t("signup.inputs.password.requirements.upper"),
         valid: /[A-Z]/.test(password),
       },
       {
-        message: "Pelo menos 1 letra miniscula",
+        message: t("signup.inputs.password.requirements.lower"),
         valid: /[a-z]/.test(password),
       },
       {
-        message: "Pelo menos 1 número",
+        message: t("signup.inputs.password.requirements.number"),
         valid: /\d/.test(password),
       },
     ];
@@ -297,8 +310,8 @@ const RegisterComponent = ({
       <Input
         radius="sm"
         type="text"
-        label="Nome"
-        placeholder="Digite seu nome"
+        label={t("signup.inputs.name.label")}
+        placeholder={t("signup.inputs.name.placeholder")}
         className="mt-4"
         size="lg"
         labelPlacement="outside"
@@ -307,9 +320,9 @@ const RegisterComponent = ({
       />
       <Input
         type="email"
-        label="E-mail"
+        label={t("signup.inputs.email.label")}
         radius="sm"
-        placeholder="Digite seu email"
+        placeholder={t("signup.inputs.email.placeholder")}
         size="lg"
         labelPlacement="outside"
         {...register("email")}
@@ -318,9 +331,9 @@ const RegisterComponent = ({
       <div>
         <Input
           type={passwordShown ? "text" : "password"}
-          label="Senha"
+          label={t("signup.inputs.password.label")}
           radius="sm"
-          placeholder="Digite sua senha"
+          placeholder={t("signup.inputs.password.placeholder")}
           size="lg"
           endContent={
             passwordShown ? (
@@ -359,7 +372,7 @@ const RegisterComponent = ({
         type="submit"
         isLoading={loading}
       >
-        Cadastrar
+        {t("signup.button")}
       </Button>
     </form>
   );

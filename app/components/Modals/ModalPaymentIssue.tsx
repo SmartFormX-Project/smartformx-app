@@ -7,19 +7,23 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  UseDisclosureProps,
 } from "@nextui-org/react";
 // import PaymentService from "@/app/api/repository/PaymentService";
-import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
 import { AlertCircle } from "lucide-react";
+import { useTranslation } from "@/app/i18n/client";
 
 export default function ModalPaymentIssue({
   isOpen,
-  onOpen,
   onChange,
-}: UseDisclosureProps) {
+  lng,
+}: {
+  isOpen: boolean;
+  onChange: () => void;
+  lng: string;
+}) {
   const { data } = useSession();
+  const { t } = useTranslation(lng, "modals");
 
   const goToPortal = async () => {
     const user = data?.user;
@@ -49,25 +53,22 @@ export default function ModalPaymentIssue({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-            Houve um problema com seu pagamento
+              {t("payment-issue-modal.title")}
             </ModalHeader>
             <ModalBody className="flex flex-col justify-center items-center text-justify">
               <div className="bg-[#ED1313] bg-opacity-10 w-fit rounded-full p-2">
                 <AlertCircle color={"#ED1313"} size={100} />
               </div>
               <p className="text-sm mt-2">
-                A cobrança recente do seu método de pagamento não foi
-                bem-sucedida. Verifique suas informações ou forneça um novo
-                método de pagamento para evitar a suspensão dos serviços.
+                {t("payment-issue-modal.description")}
               </p>
               <p className="text-center text-sm mt-2">
-                Clique em &apos;Atualizar pagamento&apos; para resolver este
-                problema
+                {t("payment-issue-modal.p")}
               </p>
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onPress={goToPortal} fullWidth>
-                Atualizar pagamento
+              {t("payment-issue-modal.button")}
               </Button>
             </ModalFooter>
           </>

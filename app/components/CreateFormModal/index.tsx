@@ -37,12 +37,19 @@ import FormsService from "@/app/api/repository/FormService";
 import useSWR from "swr";
 import UserService from "@/app/api/repository/UserServices";
 import { AppFetchJSON } from "@/app/api/repository/fetch";
+import { useTranslation } from "@/app/i18n/client";
 
 export default function CreateFormButton({
   redirectSubmit = () => {},
+  buttonText,
+  lng,
 }: {
   redirectSubmit?: () => void;
+  buttonText: string;
+  lng: string;
 }) {
+  const { t } = useTranslation(lng, "modals");
+
   const { data, isLoading } = useSWR(
     UserService.FetchIfIsAllowToCreateURL(),
     AppFetchJSON
@@ -84,19 +91,16 @@ export default function CreateFormButton({
       }
     } catch (error) {
       setLoading(false);
-      toast.error(
-        "Não foi possivel criar o formulário, tente novamente mais tarde.",
-        {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        }
-      );
+      toast.error(t("create-form.error"), {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
   return (
@@ -112,7 +116,7 @@ export default function CreateFormButton({
         onClick={() => (data && data.available ? onOpen() : redirectSubmit())}
         isLoading={isLoading}
       >
-        Criar formulário
+        {buttonText}
       </Button>
       <Modal
         isOpen={isOpen}
@@ -125,21 +129,21 @@ export default function CreateFormButton({
           {(onClose: any) => (
             <form onSubmit={handleSubmit((data) => onSubmit(data, onClose))}>
               <ModalHeader className="flex flex-col gap-1">
-                Novo SmartForm
+                {t("create-form.title")}
               </ModalHeader>
               <ModalBody>
                 <Input
                   type="text"
-                  label="Titulo"
-                  placeholder="Digite um titulo para o form."
+                  label={t("create-form.input.title.label")}
+                  placeholder={t("create-form.input.title.placeholder")}
                   labelPlacement="outside"
                   readOnly={loading}
                   {...register("title")}
                   isRequired
                 />
                 <Textarea
-                  label="Descrição"
-                  placeholder="Descreva o intuito do formulário, o que você espera descobrir com as respostas"
+                  label={t("create-form.input.descritpion.title")}
+                  placeholder={t("create-form.input.descritpion.placeholder")}
                   labelPlacement="outside"
                   readOnly={loading}
                   isRequired
@@ -147,12 +151,14 @@ export default function CreateFormButton({
                 ></Textarea>
 
                 <CustomCheckboxGroup
+                  t={t}
                   onChange={setGroupSelected}
                   selected={groupSelected}
                 />
                 <div>
                   <span className="text-sm mt-3">
-                    Número máximo de questões a serem geradas:{" "}
+                    {/* Número máximo de questões a serem geradas:{" "} */}
+                    {t("create-form.input.max_q.label")}{" "}
                     <b className="text-red-500">*</b>
                   </span>
                   <Select
@@ -162,7 +168,7 @@ export default function CreateFormButton({
                     labelPlacement="outside"
                     items={max_questions_op}
                     defaultSelectedKeys={["8"]}
-                    placeholder="Selecione"
+                    placeholder={t("create-form.input.max_q.placeholder")}
                     {...register("max_questions")}
                     value={getValues("max_questions")}
                     isRequired
@@ -183,10 +189,10 @@ export default function CreateFormButton({
                   onPress={onClose}
                   isDisabled={loading}
                 >
-                  Cancelar
+                  {t("create-form.footer.cancel-button")}
                 </Button>
                 <Button type="submit" color="primary" isLoading={loading}>
-                  Gerar smartform
+                  {t("create-form.footer.submit-button")}
                 </Button>
               </ModalFooter>
             </form>
@@ -204,49 +210,48 @@ interface FeedbackForms {
   description: string;
   icon: any;
 }
-const CustomSelect = ({ register, readonly = false }: any) => {
+const CustomSelect = ({ register, readonly = false, t }: any) => {
   const users: FeedbackForms[] = [
     {
-      id: 1,
-      name: "Geral",
+      id: 0,
+      name: t("create-form.form-options.general.name"),
       value: "general",
-      description:
-        "Coletar respostas variadas, com foco no intuito estabelecido",
+      description: t("create-form.form-options.general.description"),
       icon: <LayoutGrid color="#000000" strokeWidth={1.5} />,
     },
     {
-      id: 0,
+      id: 1,
       name: "NPS",
       value: "nps",
-      description: "Net Promoter Score",
+      description: t("create-form.form-options.nps.description"),
       icon: <LineChart color="#000000" strokeWidth={1.5} />,
     },
     {
       id: 2,
-      name: "Qualidade",
+      name: t("create-form.form-options.quality.name"),
       value: "quality",
-      description: "Foco na qualidade do negócio(estrutura, atendimento...)",
+      description: t("create-form.form-options.general.description"),
       icon: <BadgeCheck color="#000000" strokeWidth={1.5} />,
     },
     {
       id: 3,
-      name: "Atendimento",
+      name: t("create-form.form-options.service.name"),
       value: "customer_service",
-      description: "Foco no atendimento ao cliente",
+      description: t("create-form.form-options.service.description"),
       icon: <Headphones color="#000000" strokeWidth={1.5} />,
     },
     {
       id: 4,
-      name: "Experiência",
+      name: t("create-form.form-options.exp.name"),
       value: "experence",
-      description: "Foco na experiência do cliente com seu negócio",
+      description: t("create-form.form-options.exp.description"),
       icon: <Star color="#000000" strokeWidth={1.5} />,
     },
     {
       id: 5,
-      name: "Produto",
+      name: t("create-form.form-options.product.name"),
       value: "product",
-      description: "Coletar resposta sobre seus produtos",
+      description: t("create-form.form-options.product.description"),
       icon: <Tags color="#000000" strokeWidth={1.5} />,
     },
   ];
@@ -254,10 +259,10 @@ const CustomSelect = ({ register, readonly = false }: any) => {
     <Select
       disabled={readonly}
       isRequired
-      label="Qual tipo de formulário deseja usar?"
+      label={t("create-form.inputs.type.label")}
       labelPlacement="outside"
       radius="lg"
-      placeholder="Selecione um"
+      placeholder={t("create-form.inputs.type.placeholder")}
       items={users}
       variant="bordered"
       {...register("type")}
@@ -324,9 +329,11 @@ const CustomSelect = ({ register, readonly = false }: any) => {
 function CustomCheckboxGroup({
   onChange,
   selected,
+  t,
 }: {
   onChange: (vales: any) => void;
   selected: any;
+  t: any;
 }) {
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -340,9 +347,15 @@ function CustomCheckboxGroup({
         value={selected}
         onChange={onChange}
       >
-        <CustomCheckbox value="name">Nome</CustomCheckbox>
-        <CustomCheckbox value="sex">Sexo</CustomCheckbox>
-        <CustomCheckbox value="email">Email</CustomCheckbox>
+        <CustomCheckbox value="name">
+          {t("create-form.custom-elements.name")}
+        </CustomCheckbox>
+        <CustomCheckbox value="sex">
+          {t("create-form.custom-elements.sex")}
+        </CustomCheckbox>
+        <CustomCheckbox value="email">
+          {t("create-form.custom-elements.email")}
+        </CustomCheckbox>
         {/* <CustomCheckbox value="phone">Telefone</CustomCheckbox> */}
       </CheckboxGroup>
     </div>

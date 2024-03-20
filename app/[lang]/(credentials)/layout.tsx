@@ -1,7 +1,7 @@
 import react from "react";
 
 export const metadata = {
-  title: "Smart Forms",
+  title: "SmartFormX",
   description: "Page description",
 };
 

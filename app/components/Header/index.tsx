@@ -14,12 +14,11 @@ import { signOut } from "next-auth/react";
 import Image from "next/image";
 import ProfileModal from "../Modals/ProfileModal";
 import { usePathname, useRouter } from "next/navigation";
+import { useTranslation } from "@/app/i18n/client";
 
-export default function HeaderComponent() {
+export default function HeaderComponent({my_info_text, signout_text}:{my_info_text:string, signout_text:string}) {
 
   const path = usePathname()
-
-  // if (path != "/" && path != "/single") return null;
 
   const ProfileModalDisclosure = useDisclosure();
   return (
@@ -55,7 +54,7 @@ export default function HeaderComponent() {
         </DropdownTrigger>
         <DropdownMenu aria-label="Static Actions">
           <DropdownItem key="data" onClick={ProfileModalDisclosure.onOpen}>
-            Meus dados
+            {my_info_text}
           </DropdownItem>
 
           <DropdownItem
@@ -63,8 +62,8 @@ export default function HeaderComponent() {
             key="signout"
             onClick={() => signOut()}
             startContent={<LogOut size={18} />}
-          >
-            Sair
+            >
+            {signout_text}
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
